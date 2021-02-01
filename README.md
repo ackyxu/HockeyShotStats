@@ -81,5 +81,10 @@ NHL does not currently record players passes (at least the data is not available
 
 
 
+## ***User Stories***
 
-
+*For Phase 1 of the Project:*
+- As a user, I want to be able to iterate a list of events and print out a descriptive detail of the event
+    - The program will print out the next event after a certain time has pass, or with  after a user input, whichever comes first
+- As a user, I want to be able to retrieve boxscore statistics after all the program iterates through all the event.
+- As a user, I want to be able to retrieve a list of goals and penalties in the game after the program iterates through all the events.  
