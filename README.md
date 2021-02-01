@@ -12,7 +12,7 @@ This personal project will be the phase one of the tools I want to develop to he
 The main goal of this project is to render all the shots, goals and block shots of a game with their respected teams.  
 Those events will be rendered to an image of an ice rink in roughly the location of where the event occured. 
 
-Theortically, users can use this program to catch back up on a game they missed (not that I recommend it, as NHL posts highlights to their Youtube channel not long after a game ends). 
+Theoretically, users can use this program to catch back up on a game they missed (not that I recommend it, as NHL posts highlights to their Youtube channel not long after a game ends). 
 
 Due to the restriction in the scope of the project, the program at the current state ***will not*** call NHL's API to  retrieve live or past games.  
 The program at its current state will call an offline, cached game played on January 13, 2021 with the Edmonton Oilers hosting the Vancouver Canucks.
