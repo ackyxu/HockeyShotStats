@@ -84,7 +84,8 @@ NHL does not currently record players passes (at least the data is not available
 ## ***User Stories***
 
 *For Phase 1 of the Project:*
-- As a user, I want to be able to iterate a list of events and print out a descriptive detail of the event
-    - The program will print out the next event after a certain time has pass, or with  after a user input, whichever comes first
+- As a user, I want to be able to build a Match by adding in all events and data required, such as individual events that occurred in the game, and the metadata that makes up the game.
+    - Further on in the project, I want to be able to build a match from the JSON file retrieved from NHL's API.  
+- As a user, I want to be able to take a Match and print out events, similar to a radio play by play for a live game.
 - As a user, I want to be able to retrieve boxscore statistics after all the program iterates through all the event.
 - As a user, I want to be able to retrieve a list of goals and penalties in the game after the program iterates through all the events.  
