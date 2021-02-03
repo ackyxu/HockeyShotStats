@@ -1,18 +1,17 @@
 # My Personal Project
 
-## *Play by Play of Hockey Shots, Blocks, and Goals*
+## *Visualization of Shots and Goals in a NHL Game*
 
 ### Introduction
 
-This project will take use the event data of a hockey match retrived from NHL's API and visual represent a hockey match,
-similar to what you hear in a play by play broadcast of a hockey game over the radio or TV.
+This project will take use the event data of a hockey match retrieved from NHL's API and visual represent of the scoring event that occured in the match. 
+The program will also run additional analysis (time to goal after giveaway, faceoffs, etc..).
 
 One of the ongoing project that I wanted to work on is a visualization of events from a hockey game.  
-This personal project will be the phase one of the tools I want to develop to help me visualize hockey plays.  
-The main goal of this project is to render all the shots, goals and block shots of a game with their respected teams.  
-Those events will be rendered to an image of an ice rink in roughly the location of where the event occured. 
+This personal project will be the phase of a bigger project that I am interested in continuing after CPSC 210.  
 
-Theoretically, users can use this program to catch back up on a game they missed (not that I recommend it, as NHL posts highlights to their Youtube channel not long after a game ends). 
+This program will hopefully give users insight on the defensive style that a team is playing (via visalization where teams are allows shots to go through and where they focus on blocking shots).
+With additional stats included in the API call, I want to be able to add more analysis in the project further on.  
 
 Due to the restriction in the scope of the project, the program at the current state ***will not*** call NHL's API to  retrieve live or past games.  
 The program at its current state will call an offline, cached game played on January 13, 2021 with the Edmonton Oilers hosting the Vancouver Canucks.
@@ -29,13 +28,12 @@ The end goal of the project will be a visualization that:
 
 - Updates and displays all the shots, blockshots, and goals along with their locations, render on a image of an ice rink
 - "Boxscores" with
-    - Face-off Percentages
-    - Penalties Taken, and by whom
-    - Total Shots on Goal for both team
-    - Descriptive details of all goals scored.
+    -Faceoffs Won (good faceoff percentage is an offensive/defensive indicator)
+    -Shots on Goal
+    -Goals so far
+    -Block Shots so far
 - A descriptive update of the event that occur
 
-All the events above will be rendered on a graphic image event by event, similar to a play by play given by radio announcers.
 Since a normal game will take at least 60 minutes to complete, the events will be updated in an accelerated rate (to be determined).
 
 
@@ -57,35 +55,25 @@ The JSON contains multiple nested objects, but this program (as of now) is only 
     - allPlays contains all the event objects in a game.
     
 
-NHL records the following events in allPlays:
+NHL records events with a key/id to indicate what kinda of event that occured.  For this project, I will be only interested in events with the following key:
 
-- BLOCKED_SHOT
-- FACEOFF
-- GAME_END
-- GAME_SCHEDULED
+- BLOCKED_SHOT 
+- FACEOFF 
+- GAME_END 
 - GIVEAWAY
 - GOAL
-- HIT
-- MISSED_SHOT
-- PENALTY
 - PERIOD_END
 - PERIOD_OFFICIAL
 - PERIOD_READY
 - PERIOD_START
-- SHOT
-- STOP
-- TAKEAWAY
-
-Unfortunately, descriptive updates of passes made by players will be one of the main things that will differ from an actual play by play done by radio or TV broadcasts.
-NHL does not currently record players passes (at least the data is not available to end users).
 
 
 
 ## ***User Stories***
 
 *For Phase 1 of the Project:*
-- As a user, I want to be able to build a Match by adding in all events and data required, such as individual events that occurred in the game, and the metadata that makes up the game.
-    - Further on in the project, I want to be able to build a match from the JSON file retrieved from NHL's API.  
-- As a user, I want to be able to take a Match and print out events, similar to a radio play by play for a live game.
-- As a user, I want to be able to retrieve boxscore statistics after all the program iterates through all the event.
-- As a user, I want to be able to retrieve a list of goals and penalties in the game after the program iterates through all the events.  
+- As a user, I want to be able to build a Match by adding in just shots, shot blocked, and goals events and the metadata that makes up the game.
+    - Further on in the project, I want to be able to build a match with the above events from the JSON file retrieved from NHL's API.  
+- As a user, I want to be able to take a Match and print out in detail description of the events of interest
+- As a user, I want to be able to run a Match and return, as the match progresses, stats such as shot on goals and blocked shots.
+
