@@ -1,4 +1,8 @@
+//CONSIDER FOR DELETION
+
+
 package model;
+
 
 import java.util.List;
 
@@ -6,10 +10,16 @@ import java.util.List;
 public class MatchData {
     private GameData gameData;
     private List<LiveData> allLiveData;
+    //The offical ID for the match, per NHL API
+    private Integer matchID;
+    //For filtering games withing certain date
+    private String matchDate;
 
-    public MatchData(GameData gameData, Team team, List<LiveData> allLiveData) {
+    public MatchData(GameData gameData, List<LiveData> allLiveData, Integer matchID, String matchDate) {
         this.gameData = gameData;
         this.allLiveData = allLiveData;
+        this.matchID = matchID;
+        this.matchDate = matchDate;
 
     }
 
@@ -22,4 +32,21 @@ public class MatchData {
     public List<LiveData> getAllLiveData() {
         return allLiveData;
     }
+
+    public String getMatchDate() {
+        return matchDate;
+    }
+
+    public Integer getMatchID() {
+        return matchID;
+    }
+    //REQUIRES: an integer
+    //MODIFIES: none
+    //EFFECT: return true if the given integer matches the matchID
+
+    public boolean compareMatchID(Integer i) {
+        return this.getMatchID().equals(i);
+    }
+
+
 }

@@ -1,0 +1,12 @@
+Oilers
+EDM
+Canucks
+VAN
+2020020004
+2021-01-14
+Connor McDavid,Winner,Adam Gaudette,Loser,EDM,Connor McDavid faceoff won against Adam Gaudette,Faceoff,FACEOFF,REGULAR,1st,01:57,69,22
+Elias Pettersson,Hitter,Caleb Jones,Hittee,VAN,Elias Pettersson hit Caleb Jones,Hit,HIT,REGULAR,1st,03:30,6,36
+Tyler Motte,Shooter,Mikko Koskinen,Goalie,VAN,Tyler Motte Wrist Shot saved by Mikko Koskinen,Shot,SHOT,REGULAR,2st,03:42,-77,-31
+Kailer Yamamoto,Blocker,Quinn Hughes,Shooter,EDM,Quinn Hughes shot blocked shot by Kailer Yamamoto,Blocked Shot,BLOCKED_SHOT,REGULAR,2nd,18:40,71,7
+Elias Pettersson,Shooter,,,VAN,Elias Pettersson Wide of Net,Missed Shot,MISSED_SHOT,REGULAR,3rd,15:32,-57,24
+Bo Horvat,Scorer,Tanner Pearson,Assist,VAN,"Bo Horvat (1) Wrist Shot assists: Tanner Pearson (1)",Goal,GOAL,REGULAR,3rd,18:47,68,143
