@@ -44,7 +44,9 @@ The JSON contains multiple nested objects, but this program (as of now) is only 
 ## ***User Stories***
 
 *For Phase 1 of the Project:*
-- As a user, I want to be able to add a match to the program and be able to analysis it through the program
-- As a user, I want to be able to retrieve all the shot events by both the Canucks and the opposing team from the matches I stored in the program
-- As a user, I want to be able to retrieve the shot events from multiple games
-- As a user, I want to be able to retrieve information about the team's faceoff stats.
+- As a user, I want to be able to add a match to the program and parse it into MatchData, GameData, LiveData, and Team
+- As a user, I want to be able to drop a match if I realize that the match is not representative of the team as a whole, etc.
+- As a user, I want to be able to store my imported matches, so I can analyze all of them at once, or selectively analysis few at once
+- As a user, I want to be able to retrieve all the shot events by the Canucks  from the matches I stored in the program
+
+

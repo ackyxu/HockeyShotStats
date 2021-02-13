@@ -1,0 +1,12 @@
+Canucks
+VAN
+Senators
+OTT
+2020020117
+2021-01-29
+Jay Beagle,Winner,Brady Tkachuk,Loser,VAN,Jay Beagle faceoff won against Brady Tkachuk,Faceoff,FACEOFF,REGULAR,1st,05:30,0,0
+Elias Pettersson,Scorer,Brock Boeser,Assist,VAN,Elias Pettersson (3) Snap Shot assists: Brock Boeser (3) Quinn Hughes (10),Goal,GOAL,REGULAR,1st,10:49,-80,0
+Colin White,Shooter,,,OTT,Colin White Wide of Net,Missed Shot,MISSED_SHOT,REGULAR,2nd,01:20,-44,26
+Jay Beagle,Hitter,Thomas Chabot,Hittee,VAN,Jay Beagle hit Thomas Chabot,Hit,HIT,REGULAR,2nd,07:30,91,-31
+Alexander Edler,Shooter,,,VAN,Alexander Edler Wide of Net,Missed Shot,MISSED_SHOT,REGULAR,3rd,17:41,-34,-31
+Zack MacEwen,Shooter,Matt Murray,Goalie,VAN,Zack MacEwen Wrist Shot saved by Matt Murray,Shot,SHOT,REGULAR,3rd,19:03,-42,-27

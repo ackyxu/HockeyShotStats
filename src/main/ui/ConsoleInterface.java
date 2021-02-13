@@ -14,58 +14,29 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-//TODO refact out the code in ConsoleInterface to Seperate Methods
-//     make sure all methods are used in LiveData
+
+
 
 public class ConsoleInterface {
 
-
-
-    private Scanner input;
     List<MatchData> storedMatches;
     List<String> shotEvents;
     List<Integer> storedMatchIDs;
-
-
-
+    private Scanner input;
 
     public ConsoleInterface() throws IOException {
 
         String option;
-        boolean exitcode = false;
+        boolean keepgoing = true;
         init();
-        while (!exitcode) {
+        while (keepgoing) {
 
             displayMenu();
 
             option = this.input.next();
 
-            exitcode = processMainOptions(option);
+            keepgoing = processMainOptions(option);
 
-//            if (option.equals("1")) {
-//
-//                processMatch();
-//
-//            } else if (option.equals("2")) {
-//
-//                processEvents("GOAL");
-//
-//            } else if (option.equals("3")) {
-//
-//                processEvents(shotEvents);
-//
-//
-//
-//            } else if (option.equals("4")) {
-//
-//                System.out.println("\nShutting Down");
-//
-//                exitcode = true;
-//
-//            } else {
-//                System.out.println("Unrecognized Input");
-//                option = null;
-//            }
         }
 
     }
@@ -84,36 +55,152 @@ public class ConsoleInterface {
         this.shotEvents.add("GOAL");
     }
 
+    //MODIFIES: None
+    //EFFECT: Process the options selected from displayMenu() in Console Interface
+    //NOTE: Make sure to update displayMenu() when adding new options
     private boolean processMainOptions(String option) throws IOException {
-        boolean exitcode = false;
+        boolean keepgoing = true;
         if (option.equals("1")) {
 
-            processMatch();
+            processStoredMatchOptions();
 
         } else if (option.equals("2")) {
-
-            processEvents("GOAL");
+            processEventOptions();
 
         } else if (option.equals("3")) {
-
-            processEvents(shotEvents);
-
-
+            processSummaryOptions();
 
         } else if (option.equals("4")) {
 
             System.out.println("\nShutting Down");
 
-            exitcode = true;
+            keepgoing = false;
 
         } else {
             System.out.println("Unrecognized Input");
 
         }
 
-        return exitcode;
+        return keepgoing;
+    }
+
+    //MODIFIES: None
+    //EFFECT: Display  Menu Options
+    //NOTE: Make sure to update processMainOptions() when adding new options
+    private void displayMenu() {
+        menuQuestion();
+        System.out.println("1: Import/Drop Match");
+        System.out.println("2: Open Events Menu");
+        System.out.println("3: Matches Summary Menu");
+        System.out.println("4: Exit");
 
     }
+
+    private void displayStoreMatchMenu() {
+        menuQuestion();
+        System.out.println("1: Import Match");
+        System.out.println("2: Drop Match");
+        System.out.println("3: Return to Main Menu");
+
+    }
+
+    private void processStoredMatchOptions() throws IOException {
+        displayStoreMatchMenu();
+        String option = this.input.next();
+
+        if (option.equals("1")) {
+
+            processMatch();
+
+        } else if (option.equals("2")) {
+
+            dropMatch();
+
+        } else if (option.equals("3")) {
+
+            System.out.println("\n");
+
+        } else {
+            System.out.println("Unrecognized Input");
+        }
+
+
+    }
+
+
+    //MODIFIES: None
+    //EFFECT: Opens and process the submenu for events related options
+
+    private void processEventOptions() {
+
+        displayEventMenu();
+        String option = this.input.next();
+
+        if (option.equals("1")) {
+
+            processEvents("GOAL");
+
+        } else if (option.equals("2")) {
+
+            processEvents(shotEvents);
+
+        } else if (option.equals("3")) {
+
+            System.out.println("\n");
+
+        } else {
+            System.out.println("Unrecognized Input");
+        }
+
+
+    }
+
+    //MODIFIES: None
+    //EFFECT: Display Event Menu Options
+    //NOTE: Make sure to update processMainOptions() when adding new options
+    private void displayEventMenu() {
+        menuQuestion();
+        System.out.println("1: Return Goals Scored");
+        System.out.println("2: Return Shot Events");
+        System.out.println("3: Return to Main Menu");
+
+    }
+
+    //MODIFIES: None
+    //EFFECT: Display Summary Menu Options
+    //NOTE: Make sure to update processMainOptions() when adding new options
+    private void displaySummaryMenu() {
+        menuQuestion();
+        System.out.println("1: List All Matches Imported");
+        System.out.println("2: Summary of Imported Matches");
+        System.out.println("3: Return to Main Menu");
+
+    }
+
+    private void processSummaryOptions() {
+
+        displaySummaryMenu();
+        String option = this.input.next();
+
+        if (option.equals("1")) {
+
+            printStoreMatchID();
+
+        } else if (option.equals("2")) {
+
+            processMatchSummary();
+
+        } else if (option.equals("3")) {
+
+            System.out.println(" ");
+
+        } else {
+            System.out.println("Unrecognized Input");
+        }
+
+
+    }
+
 
     //MODIFIES: NONE
     //EFFECT: Returns a parsed game match that has been:
@@ -193,7 +280,7 @@ public class ConsoleInterface {
     private List<LiveData> parseListLiveData(List<String> lstr) {
         List<LiveData> allLiveData = new ArrayList<>();
 
-        for (String s: lstr) {
+        for (String s : lstr) {
             allLiveData.add(parseLiveData(s));
 
         }
@@ -212,88 +299,73 @@ public class ConsoleInterface {
         List<String> s = Arrays.asList(str.split(","));
 
 
-        return new LiveData(s.get(0), s.get(1),s.get(2),s.get(3),s.get(4),s.get(5),
-                                        s.get(6),s.get(7),Integer.parseInt((s.get(9)).substring(0,1)),
-                                        s.get(8), LocalTime.parse(s.get(10)),
-                                        Integer.parseInt(s.get(11)),Integer.parseInt(s.get(12)));
-    }
-
-    private void retrieveGoals(List<MatchData> listMatch) {
-        List<String> goals = new ArrayList<>();
-        for (MatchData m: listMatch) {
-            goals.addAll(retrieveGoals(m));
-        }
+        return new LiveData(s.get(0), s.get(1), s.get(2), s.get(3), s.get(4), s.get(5),
+                s.get(6), s.get(7), Integer.parseInt((s.get(9)).substring(0, 1)),
+                s.get(8), LocalTime.parse(s.get(10)),
+                Integer.parseInt(s.get(11)), Integer.parseInt(s.get(12)));
     }
 
 
-    //MODIFIES: None
-    //Effect: Return a list of Goals Scored
-    //TODO: remove the input, change to inlcude a selector for all game or just one
-    private List<String> retrieveGoals(MatchData match) {
-
-
-
-        List<String> goals = new ArrayList<>();
-
-
-        for (LiveData l: match.getAllLiveData()) {
-            if (l.getTeam().equals("VAN") && l.getEventType().equals("GOAL")) {
-                String goal = retrieveEvent(l);
-                goals.add(goal);
-            }
-        }
-        if (goals.size() == 0) {
-            System.out.println("No Goals Were Scored By the Cancuks in This Game");
-        }
-
-        return goals;
-
-    }
-
-
-
-    //EFFECT: Display Menu Options
-
-    private void displayMenu() {
-        System.out.println("Please Enter the Number of the Option:");
-        System.out.println("1: Import Match");
-        System.out.println("2: Return Goals Scored");
-        System.out.println("3: Return Shots");
-        System.out.println("4: Exit");
-
-    }
-
-    //MODIFIES: this
+    //MODIFIES: storedMatches
     //EFFECT: parse Match via parsing match into MatchData and updates storedMatchesIDs
     private void processMatch() throws IOException {
 
-        System.out.println("Enter the file location");
-        Scanner matchjson = new Scanner(System.in);
-        String file = matchjson.next();
+        System.out.println("Enter the file name");
+        String file = input.next() + "/";
+        MatchData matchData = null;
+        try {
+            matchData = parseMatch(file);
 
-        MatchData matchData = parseMatch("test.txt/");
-        System.out.println("Match Imported!");
-        assert matchData != null;
-        System.out.println("Game Played on " + matchData.getMatchDate() + " ID: " + matchData.getMatchID());
-        storedMatches.add(matchData);
+            if (this.storedMatchIDs.contains(matchData.getMatchID())) {
+                System.out.println("Error: Match Already Imported");
+            } else {
+                System.out.println("Match Imported!");
+                System.out.println("Game Played on " + matchData.getMatchDate() + " ID: " + matchData.getMatchID());
+                storedMatches.add(matchData);
+                retrievedStoredID();
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error: File not Found");
+        }
+
+
+    }
+
+
+    //MODIFIES: storedMatches
+    //EFFECT: Drops Selected Match
+    private void dropMatch() {
+        MatchData match = null;
+        if (this.storedMatches.size() == 0) {
+            System.out.println("Error: Currently not Matches are imported");
+        } else {
+            System.out.println("Enter the ID of the Match you wish to drop");
+            Integer id = Integer.parseInt(input.next());
+
+            if (!storedMatchIDs.contains(id)) {
+                System.out.println("The Match was not imported/ID was entered incorrectly");
+            }
+
+            for (MatchData m : this.storedMatches) {
+
+
+                if (m.getMatchID().equals(id)) {
+                    System.out.println("Match dropped " + m.getMatchDate() + " ID: " + m.getMatchID());
+                    System.out.println("\n");
+                    match = m;
+
+
+                }
+            }
+        }
+
+
+        this.storedMatches.remove(match);
         retrievedStoredID();
 
     }
 
-    private void processShotAttempts() {
-        List<String> events = new ArrayList<>();
-        if (storedMatches.size() == 0) {
-            System.out.println("No matches are currently imported");
-        } else {
-            for (MatchData m: storedMatches) {
-                events.addAll(retrieveShotAttempts(m));
-            }
-            System.out.println("\n");
-            printEvents(events);
-            System.out.println("\n");
-        }
-
-    }
 
     //REQUIRES: input be String or List<String> that contains an eventType
     //MODIFIES: None
@@ -323,103 +395,67 @@ public class ConsoleInterface {
     }
 
 
-
     private List<String> retrieveEvents(MatchData match, String s) {
 
 
-        List<String> goals = new ArrayList<>();
+        List<String> events = new ArrayList<>();
 
 
-        for (LiveData l: match.getAllLiveData()) {
+        for (LiveData l : match.getAllLiveData()) {
             if (l.filterEvent(s)) {
-                String goal = retrieveEvent(l);
-                goals.add(goal);
+                String event = retrieveEvent(l);
+                events.add(event);
             }
         }
-        if (goals.size() == 0) {
-            System.out.println("No Goals Were Scored By the Cancuks in This Game");
+        if (events.size() == 0) {
+            System.out.println("No " + s + " for the Cancuks in This Game");
         }
 
-        return goals;
+        return events;
 
     }
 
     private List<String> retrieveEvents(MatchData match, List<String> los) {
 
 
-        List<String> goals = new ArrayList<>();
+        List<String> events = new ArrayList<>();
 
 
-        for (LiveData l: match.getAllLiveData()) {
-            if (l.filterEvent(los)) {
-                String goal = retrieveEvent(l);
-                goals.add(goal);
-            }
-        }
-        if (goals.size() == 0) {
-            System.out.println("No Goals Were Scored By the Cancuks in This Game");
-        }
-
-        return goals;
-
-    }
-
-
-
-
-    //MODIFIES: None
-    //EFFECT: Return
-
-    private  List<String> retrieveShotAttempts(MatchData match) {
-
-        List<String> eventList = new ArrayList<>();
         for (LiveData l : match.getAllLiveData()) {
-            if (l.getTeam().equals("VAN") && shotEvents.contains(l.getEventType())) {
+            if (l.filterEvent(los)) {
                 String event = retrieveEvent(l);
-                eventList.add(event);
-
+                events.add(event);
             }
         }
+        if (events.size() == 0) {
+            System.out.println("Nothing happened for the Cancuks in This Game");
+        }
 
-        return eventList;
+        return events;
+
     }
+
 
     //MODIFIES: None
     //EFFECT: convert a LiveData into an String that will be printed onto the console
     private String retrieveEvent(LiveData l) {
 
         String coor = "x: " + l.getCoorX() + " , y: " + l.getCoorY();
-        String event = l.getDetail() + " " + l.getPlayer0() + " @ " + "(" + coor + ")";
+        String line1 = l.getPeriod()  + " " + l.getPeriodType() + " " + l.getPeriodTime() + "\n";
+        String line2 = l.getPlayer0() +  " " + l.getPlayer0Type() + " | " + l.getPlayer1() +  " " + l.getPlayer1Type()
+                + "\n";
+        String line3 = l.getEvent() + " " + l.getEventType() + " "  + l.getTeam() + "\n";
 
-        return event;
-
-    }
-    //REQUIRES: ?
-    //MODIFIES: None
-    //EFFECT: Retrieve Goals from the Match and Prints it out.
-    //TODO: Maybe make List<String> into a hashmap
-    // so I can use the key to identify which game the list of string is from
-
-    private void processGoals() {
-        List<String> events = new ArrayList<>();
-        if (storedMatches.size() == 0) {
-            System.out.println("No matches are currently imported");
-        } else {
-            List<MatchData> matches  = matchOptionSelector();
-            for (MatchData m: matches) {
-                events.addAll(retrieveGoals(m));
-            }
-            System.out.println("\n");
-            printEvents(events);
-            System.out.println("\n");
-        }
+        String line4 = l.getDetail() + " " + l.getPlayer0() + " @ " + "(" + coor + ") ";
+        return line1 + line2 + line3 + line4 + "\n";
 
     }
+
 
     //MODIFIES: None
     //EFFECT: Prints out a list of Strings that represents an event
     private void printEvents(List<String> ls) {
-        for (String s: ls) {
+        for (String s : ls) {
             System.out.print(s + "\n");
         }
     }
@@ -491,21 +527,25 @@ public class ConsoleInterface {
         }
         return matches;
     }
+
     //MODIFIES: this
     //EFFECT: retrieve all the ID of matches in storeMatches
-
     private void retrievedStoredID() {
 
-        for (MatchData m: storedMatches) {
+        this.storedMatchIDs = new ArrayList<>();
+
+        for (MatchData m : storedMatches) {
             this.storedMatchIDs.add(m.getMatchID());
         }
 
     }
 
     private void printStoreMatchID() {
+        System.out.print("\n");
         for (Integer i : storedMatchIDs) {
             System.out.print(i + "\n");
         }
+        System.out.print("\n");
     }
     //REQUIRE: i must be in this.storedMatchIDs
     //MODIFIES: None
@@ -518,12 +558,17 @@ public class ConsoleInterface {
         for (MatchData m : this.storedMatches) {
             if (m.compareMatchID(i)) {
                 match = m;
+                break;
 
             } else {
-                System.out.println("Game not found, please check that you enter the correct ID");
+                continue;
             }
-        }
 
+
+        }
+        if (match.equals(null)) {
+            System.out.println("Game not found, please check that you enter the correct ID");
+        }
         return match;
     }
 
@@ -552,6 +597,44 @@ public class ConsoleInterface {
         return i;
     }
 
+    //MODIFIES: None
+    //EFFECT: Prints out a Summary of all the imported Matches
+    private void processMatchSummary() {
+        for (MatchData m : this.storedMatches) {
+            List<Integer> counts = countShotEvents(m);
+            Integer block = counts.get(0);
+            Integer shots = counts.get(1);
+            Integer missed = counts.get(2);
+            Integer goal = counts.get(3);
+
+            System.out.println("\nHome Team: " + m.getGameData().getHome().getTeamName() + " "
+                    + m.getGameData().getHome().getTeamAbr());
+            System.out.println("Away Team: " + m.getGameData().getAway().getTeamName() + " "
+                    + m.getGameData().getAway().getTeamAbr());
+            System.out.println(" ");
+            System.out.println("Date: " + m.getMatchDate() + " ID: " + m.getMatchID());
+            System.out.println("Cancuks:");
+            System.out.println("Blocked Shots:" + block + "  Shots On Net:" + shots + "  Missed Shots:" + missed);
+            System.out.println("Goals: " + goal + "\n");
+
+        }
+    }
+
+    private List<Integer> countShotEvents(MatchData m) {
+        List<Integer> counts = new ArrayList<>();
+        for (String s : this.shotEvents) {
+            Integer i = retrieveEvents(m, s).size();
+
+            counts.add(i);
+        }
+
+        return counts;
+
+    }
+
+    private void menuQuestion() {
+        System.out.println("Please Enter the Number of the Option:");
+    }
 
 
 }
