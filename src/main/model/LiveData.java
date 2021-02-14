@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 
-//Parse event from the JSON.
+//Parsed event from the JSON. Represents events that are stored in a call to NHL's Stat API for a match.
 public class LiveData {
 
     //player#:name of the player involved in the event
@@ -38,6 +38,7 @@ public class LiveData {
 
 
     //REQUIRE: coorX [-42.5, 42.5] coorY [-100,100]
+    //EFFECT: Construct a LiveData
     public LiveData(String player0, String player0Type, String player1, String player1Type, String team,
                     String detail, String event, String eventType, int period, String periodType, LocalTime periodTime,
                     int coorX, int coorY) {

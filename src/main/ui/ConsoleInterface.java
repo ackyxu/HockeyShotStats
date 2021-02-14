@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Scanner;
 
 
-
-
 public class ConsoleInterface {
     StoredMatchData storedMatchData;
     List<String> shotEvents;
@@ -82,7 +80,7 @@ public class ConsoleInterface {
     }
 
     //MODIFIES: None
-    //EFFECT: Display  Menu Options
+    //EFFECT: Display Main Menu Options
     //NOTE: Make sure to update processMainOptions() when adding new options
     private void displayMenu() {
         menuQuestion();
@@ -93,6 +91,8 @@ public class ConsoleInterface {
 
     }
 
+    //MODIFIES: None
+    //Effect: Print out menu options for Importing and Dropping Matches
     private void displayStoreMatchMenu() {
         menuQuestion();
         System.out.println("1: Import Match");
@@ -101,6 +101,8 @@ public class ConsoleInterface {
 
     }
 
+    //MODIFIES: None
+    //EFFECT: Open and process the user's input for Importing and Dropping Matches menu options
     private void processStoredMatchOptions() {
         displayStoreMatchMenu();
         String option = this.input.next();
@@ -174,6 +176,8 @@ public class ConsoleInterface {
 
     }
 
+    //MODIFIES: None
+    //EFFECT: display and process menu options for Match Summaries
     private void processSummaryOptions() {
 
         displaySummaryMenu();
@@ -203,21 +207,10 @@ public class ConsoleInterface {
     //EFFECT: Returns a parsed game match that has been:
     //Checked to Make sure the game hasn't already been parsed
     //Checked to make sure it is only parsing a Cancuks game
-    //In Phase 1, this will take in a filePatch, but it will NOT parse a JSON file
-    //This program will, for now, create a game from few predefined data for testing
+    //In Phase 1, this will take in a filePatch, in Phase 2, it will parse a JSON file
+    //There are two test files included in the package to test the parsing method and to populate the model Classes
 
-    //TODO add a placeholder CSV parser to test the method
     private MatchData parseMatch(String filePath) throws IOException {
-
-        //TODO in phase 2: implement JSON Parser to retrieve the required data to construct:
-        // - Add a dummy text test file that contains team names, to test if it rejects duplicate games
-        //   and to detect if the game contains the Canucks
-        // - List<LiveData> and the individual LiveData
-        // - GameData
-
-
-        //In Phase 2, the variables will be formed by the JSON Parser.
-        //For Now, to test the method, it will parse text files
 
         List<String> matchText = parseText(filePath);
         String homeTeamName = matchText.get(0);
@@ -246,7 +239,6 @@ public class ConsoleInterface {
     }
 
 
-    //For Testing Purpose Only, use to parse the test Files
     //Placeholder until JSON parser is implemented
     //MODIFIES: None
     //EFFECTS: Parse a test game file and returns a List<String> with the lines in the file.
@@ -268,7 +260,7 @@ public class ConsoleInterface {
         return strs;
     }
 
-    //For Testing Purpose in Phase 1 Only, use to parse the event data from the text file make convert it to a
+    //Use to parse the event data from the text file make convert it to a list of LiveData for MatchData
     //List<LiveData>.  In Phase 2, these will use a JSON parser to parse the ArrayList (JSON) that represent all the
     //game events in the Match JSON file.
     //MODIFIES: None
@@ -285,8 +277,7 @@ public class ConsoleInterface {
         return allLiveData;
 
     }
-    //REQUIRED: String is comma separated by this, with the data in the follow sequence that represents
-    // fields in LiveData:
+    //REQUIRED: The String to be parse is in the predefine order below:
     //player0,player0Type,player1,player1Type,team,detail,event,eventType,period,periodType,periodTime,coorX,coorY
     //MODIFIES: None
     //EFFECT: create a LiveData from the given String
@@ -303,8 +294,8 @@ public class ConsoleInterface {
     }
 
 
-    //MODIFIES: this.storedMatchData
-    //EFFECT: parse a file containing a MatchData (and its other classes that makes up a MatchData) into storedMatchData
+    //MODIFIES: this
+    //EFFECT: construct a MatchData by parsing a file that contains MatchData, then store it in StoredMatchData
     private void processMatch() {
 
         System.out.println("Enter the file name");
@@ -368,12 +359,10 @@ public class ConsoleInterface {
     }
 
 
-    //REQUIRES: input be String or List<String> that contains an eventType
+    //REQUIRES: input is an eventType or list of eventType, which are criteria for filtering LiveData
     //MODIFIES: None
-    //EFFECT: Retrieve Goals from the Match and Prints it out.
-    //TODO: Maybe make List<String> into a hashmap
-    // so I can use the key to identify which game the list of string is from
-
+    //EFFECT: process and prints out events, fitlered by the given input EventType/EventTypes with options to select
+    //        all MatchData in StoreMatchData, or user selected MatchData
     private void processEvents(Object o) {
         List<String> events = new ArrayList<>();
         if (this.storedMatchData.storedSize() == 0) {
@@ -395,7 +384,10 @@ public class ConsoleInterface {
         }
     }
 
-
+    //MODIFIES: None
+    //EFFECT: Retrieved filtered event base on the give EventType S from give MatchData, then return the events as
+    //        processed Strings
+    //Part of a Method Overload, to allowed a single EventType, or list of EventTypes
     private List<String> retrieveEvents(MatchData match, String s) {
 
 
@@ -410,11 +402,14 @@ public class ConsoleInterface {
             events.add(retrieveEvent(l));
         }
 
-
         return events;
 
     }
 
+    //MODIFIES: None
+    //EFFECT: Retrieved filtered event base on the give EventTypes los from give MatchData, then return the events as
+    //        processed Strings
+    //Part of a Method Overload, to allowed a single EventType, or list of EventTypes
     private List<String> retrieveEvents(MatchData match, List<String> los) {
 
 
@@ -432,7 +427,6 @@ public class ConsoleInterface {
         }
 
 
-
         return events;
 
     }
@@ -443,10 +437,10 @@ public class ConsoleInterface {
     private String retrieveEvent(LiveData l) {
 
         String coor = "x: " + l.getCoorX() + " , y: " + l.getCoorY();
-        String line1 = l.getPeriod()  + " " + l.getPeriodType() + " " + l.getPeriodTime() + "\n";
-        String line2 = l.getPlayer0() +  " " + l.getPlayer0Type() + " | " + l.getPlayer1() +  " " + l.getPlayer1Type()
+        String line1 = l.getPeriod() + " " + l.getPeriodType() + " " + l.getPeriodTime() + "\n";
+        String line2 = l.getPlayer0() + " " + l.getPlayer0Type() + " | " + l.getPlayer1() + " " + l.getPlayer1Type()
                 + "\n";
-        String line3 = l.getEvent() + " " + l.getEventType() + " "  + l.getTeam() + "\n";
+        String line3 = l.getEvent() + " " + l.getEventType() + " " + l.getTeam() + "\n";
 
         String line4 = l.getDetail() + " " + l.getPlayer0() + " @ " + "(" + coor + ") ";
         return line1 + line2 + line3 + line4 + "\n";
@@ -528,7 +522,18 @@ public class ConsoleInterface {
         return matches;
     }
 
+    //MODIFIES: None
+    //EFFECT: Display the menu options for retrieveSelectedMatches()
+    private void selectMatchOptions() {
 
+        System.out.println("Which Game you want to print out? ");
+        System.out.println("Type \"Games\" for list of all ID of games imported:\n");
+        System.out.println("Type the ID of the game you want to retrieve, separated by a comma:\n");
+    }
+
+    //REQUIRE: this.storedMatchData != null
+    //MODIFIES: None
+    //EFFECT: Prints out the IDs of all the matches in storedMatchData
     private void printStoreMatchID() {
         System.out.print("\n");
         for (Integer i : this.storedMatchData.getMatchIDs()) {
@@ -536,10 +541,10 @@ public class ConsoleInterface {
         }
         System.out.print("\n");
     }
+
     //REQUIRE: i must be in this.storedMatchIDs
     //MODIFIES: None
     //EFFECT: retrieve matches with the same matchID as the given integer
-
     private MatchData retrieveMatchByID(Integer i) {
 
         MatchData match = null;
@@ -551,22 +556,14 @@ public class ConsoleInterface {
 
             }
 
-
         }
 
         return match;
     }
 
-
-    private void selectMatchOptions() {
-
-        System.out.println("Which Game you want to print out? ");
-        System.out.println("Type \"Games\" for list of all ID of games imported:\n");
-        System.out.println("Type the ID of the game you want to retrieve, separated by a comma:\n");
-    }
-
-
-
+    //REQUIRE: s is a String that contains only numerical Digits\
+    //MODIFIES: None
+    //EFFECT: Parse a string into Integer that represents a MatchData.MatchID
     private Integer parseStringToID(String s) {
         Integer i = 0;
         try {
@@ -580,6 +577,7 @@ public class ConsoleInterface {
         return i;
     }
 
+    //REQUIRE: storedMatchData.size() != 0
     //MODIFIES: None
     //EFFECT: Prints out a Summary of all the imported Matches
     private void processMatchSummary() {
@@ -603,6 +601,8 @@ public class ConsoleInterface {
         }
     }
 
+    //MODIFIES: None
+    //EFFECT: Count the number of event that matches the ones defined in shotEvents.
     private List<Integer> countShotEvents(MatchData m) {
         List<Integer> counts = new ArrayList<>();
         for (String s : this.shotEvents) {
@@ -615,7 +615,10 @@ public class ConsoleInterface {
 
     }
 
+    //MODIFIES: None
+    //Display the menu option questions for the Main Menu and Submenus
     private void menuQuestion() {
+
         System.out.println("Please Enter the Number of the Option:");
     }
 

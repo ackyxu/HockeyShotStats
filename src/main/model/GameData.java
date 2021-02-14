@@ -7,6 +7,7 @@ public class GameData {
     private Team home;
     private Team away;
 
+    //EFFECT: construct a GameData
     public GameData(Team home, Team away) {
         this.home = home;
         this.away = away;

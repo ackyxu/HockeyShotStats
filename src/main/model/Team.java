@@ -7,7 +7,8 @@ public class Team {
     // Abbreviation of Team Name
     private final String teamAbr;
 
-
+    //REQUIRE: None (Format enforced by the parse JSON)
+    //EFFECT: Construct a new Team
     public Team(String name, String abr) {
         this.teamName = name;
         this.teamAbr = abr;

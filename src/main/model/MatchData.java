@@ -16,6 +16,8 @@ public class MatchData {
     //For filtering games withing certain date
     private String matchDate;
 
+    //REQUIRES: None
+    //EFFECT: Construct a MatchData
     public MatchData(GameData gameData, List<LiveData> allLiveData, Integer matchID, String matchDate) {
         this.gameData = gameData;
         this.allLiveData = allLiveData;
@@ -40,14 +42,20 @@ public class MatchData {
     public Integer getMatchID() {
         return matchID;
     }
-    //REQUIRES: an integer
+
+    //REQUIRES: an integer that represent a matchID, or in the same format
     //MODIFIES: none
     //EFFECT: return true if the given integer matches the matchID
-
     public boolean compareMatchID(Integer i) {
         return this.getMatchID().equals(i);
     }
 
+
+
+    //REQUIRE: given filter is in the same format as GameData.Team.teamAbr, s is an EventType found in LiveData
+    //MODIFIES: None
+    //Returns a filter list of LiveData from this.allLiveData base on the given criteria
+    //Part of a method overload to allow a single EventType filter, or a list of EventType
     public List<LiveData> getFilteredEvent(String filter, String s) {
 
         List<LiveData> events = new ArrayList<>();
@@ -63,6 +71,12 @@ public class MatchData {
 
     }
 
+
+    //REQUIRE: given filter is in the same format as GameData.Team.teamAbr, los is list with  EventType found in
+    //         LiveData
+    //MODIFIES: None
+    //EFFECT: Returns a filter list of LiveData from this.allLiveData base on the given criteria
+    //Part of a method overload to allow a single EventType filter, or a list of EventType
     public List<LiveData> getFilteredEvent(String filter, List<String> los) {
 
         List<LiveData> events = new ArrayList<>();

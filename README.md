@@ -44,7 +44,8 @@ The JSON contains multiple nested objects, but this program (as of now) is only 
 ## ***User Stories***
 
 *For Phase 1 of the Project:*
-- As a user, I want to be able to add a match to the program and parse it into MatchData, GameData, LiveData, and Team.  Then the parsed match will be stored in StoredMatchData.
+- As a user, I want to be able to add a match to the program and parse it into MatchData. Then the parsed match will be stored in StoredMatchData.
+    - NOTE: When a user imports a MatchData, the program will construct GameData, LiveData, and Team representative of the MatchData.
 - As a user, I want to be able to drop a match if I realize that the match is not representative of the team as a whole, etc.
 - As a user, I want to be able to retrieve all the shot events by the Canucks  from the matches I stored in the program, with the option to select just goals or all Shot Events with the coordinate of where the event originated
 - As a user, I want to be able to retrieve a boxscore summary of the games in StoredMatchData
