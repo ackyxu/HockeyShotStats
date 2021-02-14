@@ -46,7 +46,6 @@ public class StoredMatchData {
     }
 
 
-
     //MODIFIES: None
     //EFFECT: Return True if our StoredMatchData Contains the given match ID
     public boolean checkContainMatchID(Integer i) {

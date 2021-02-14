@@ -37,7 +37,6 @@ public class LiveData {
     private Integer coorY;
 
 
-
     //REQUIRE: coorX [-42.5, 42.5] coorY [-100,100]
     public LiveData(String player0, String player0Type, String player1, String player1Type, String team,
                     String detail, String event, String eventType, int period, String periodType, LocalTime periodTime,
@@ -46,16 +45,16 @@ public class LiveData {
         this.player0 = player0;
         this.player0Type = player0Type;
         this.player1 = player1;
-        this.player1Type  = player1Type;
+        this.player1Type = player1Type;
         this.team = team;
-        this.detail  = detail;
-        this.event  = event;
-        this.eventType  = eventType;
-        this.period  = period;
-        this.periodType  = periodType;
-        this.periodTime  = periodTime;
-        this.coorX  = coorX;
-        this.coorY  = coorY;
+        this.detail = detail;
+        this.event = event;
+        this.eventType = eventType;
+        this.period = period;
+        this.periodType = periodType;
+        this.periodTime = periodTime;
+        this.coorX = coorX;
+        this.coorY = coorY;
 
     }
 
@@ -113,15 +112,15 @@ public class LiveData {
 
     //MODIFIES: None
     //EFFECT: one part of a method overloading; return true if EventType equals s
-    public boolean filterEvent(String s) {
+    public boolean filterEvent(String filter, String event) {
 
-        return team.equals("VAN") && eventType.equals(s);
+        return team.equals(filter) && eventType.equals(event);
     }
 
     //MODIFIES: None
     //EFFECT: one part of a method overloading; returns true if EventType is in los
-    public boolean filterEvent(List<String> los) {
+    public boolean filterEvent(String filter, List<String> los) {
 
-        return team.equals("VAN") && los.contains(eventType);
+        return team.equals(filter) && los.contains(eventType);
     }
 }

@@ -18,8 +18,9 @@ public class ConsoleInterface {
     StoredMatchData storedMatchData;
     List<String> shotEvents;
     private Scanner input;
+    private String team;
 
-    public ConsoleInterface() throws IOException {
+    public ConsoleInterface() {
 
         String option;
         boolean keepgoing = true;
@@ -42,6 +43,7 @@ public class ConsoleInterface {
         this.input = new Scanner(System.in);
         storedMatchData = new StoredMatchData();
 
+        team = "VAN";
 
         this.shotEvents = new ArrayList<>();
         this.shotEvents.add("BLOCKED_SHOT");
@@ -53,7 +55,7 @@ public class ConsoleInterface {
     //MODIFIES: None
     //EFFECT: Process the options selected from displayMenu() in Console Interface
     //NOTE: Make sure to update displayMenu() when adding new options
-    private boolean processMainOptions(String option) throws IOException {
+    private boolean processMainOptions(String option) {
         boolean keepgoing = true;
         if (option.equals("1")) {
 
@@ -397,18 +399,17 @@ public class ConsoleInterface {
     private List<String> retrieveEvents(MatchData match, String s) {
 
 
+        List<LiveData> liveDatas = match.getFilteredEvent(this.team, s);
         List<String> events = new ArrayList<>();
 
-
-        for (LiveData l : match.getAllLiveData()) {
-            if (l.filterEvent(s)) {
-                String event = retrieveEvent(l);
-                events.add(event);
-            }
-        }
-        if (events.size() == 0) {
+        if (liveDatas.size() == 0) {
             System.out.println("No " + s + " for the Cancuks in This Game");
         }
+
+        for (LiveData l : liveDatas) {
+            events.add(retrieveEvent(l));
+        }
+
 
         return events;
 
@@ -417,18 +418,20 @@ public class ConsoleInterface {
     private List<String> retrieveEvents(MatchData match, List<String> los) {
 
 
+        List<LiveData> liveDatas = match.getFilteredEvent(this.team, los);
         List<String> events = new ArrayList<>();
 
-
-        for (LiveData l : match.getAllLiveData()) {
-            if (l.filterEvent(los)) {
-                String event = retrieveEvent(l);
-                events.add(event);
-            }
-        }
-        if (events.size() == 0) {
+        if (liveDatas.size() == 0) {
             System.out.println("Nothing happened for the Cancuks in This Game");
         }
+
+        for (LiveData l : liveDatas) {
+            String event = retrieveEvent(l);
+            events.add(event);
+
+        }
+
+
 
         return events;
 
@@ -550,9 +553,7 @@ public class ConsoleInterface {
 
 
         }
-        if (match.equals(null)) {
-            System.out.println("Game not found, please check that you enter the correct ID");
-        }
+
         return match;
     }
 

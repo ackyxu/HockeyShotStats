@@ -4,6 +4,7 @@
 package model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 //Object for the JSON to parse to
@@ -28,7 +29,6 @@ public class MatchData {
     }
 
 
-
     public List<LiveData> getAllLiveData() {
         return allLiveData;
     }
@@ -48,5 +48,33 @@ public class MatchData {
         return this.getMatchID().equals(i);
     }
 
+    public List<LiveData> getFilteredEvent(String filter, String s) {
 
+        List<LiveData> events = new ArrayList<>();
+
+        for (LiveData l : this.getAllLiveData()) {
+            if (l.filterEvent(filter, s)) {
+                events.add(l);
+            }
+        }
+
+        return events;
+
+
+    }
+
+    public List<LiveData> getFilteredEvent(String filter, List<String> los) {
+
+        List<LiveData> events = new ArrayList<>();
+
+        for (LiveData l : this.getAllLiveData()) {
+            if (l.filterEvent(filter, los)) {
+                events.add(l);
+            }
+        }
+
+        return events;
+
+
+    }
 }
