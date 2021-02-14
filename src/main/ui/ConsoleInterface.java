@@ -1,9 +1,6 @@
 package ui;
 
-import model.GameData;
-import model.LiveData;
-import model.MatchData;
-import model.Team;
+import model.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,10 +15,8 @@ import java.util.Scanner;
 
 
 public class ConsoleInterface {
-
-    List<MatchData> storedMatches;
+    StoredMatchData storedMatchData;
     List<String> shotEvents;
-    List<Integer> storedMatchIDs;
     private Scanner input;
 
     public ConsoleInterface() throws IOException {
@@ -45,8 +40,8 @@ public class ConsoleInterface {
     // EFFECTS: initializes fields
     private void init() {
         this.input = new Scanner(System.in);
-        this.storedMatches = new ArrayList<>();
-        this.storedMatchIDs = new ArrayList<>();
+        storedMatchData = new StoredMatchData();
+
 
         this.shotEvents = new ArrayList<>();
         this.shotEvents.add("BLOCKED_SHOT");
@@ -104,7 +99,7 @@ public class ConsoleInterface {
 
     }
 
-    private void processStoredMatchOptions() throws IOException {
+    private void processStoredMatchOptions() {
         displayStoreMatchMenu();
         String option = this.input.next();
 
@@ -306,48 +301,53 @@ public class ConsoleInterface {
     }
 
 
-    //MODIFIES: storedMatches
-    //EFFECT: parse Match via parsing match into MatchData and updates storedMatchesIDs
-    private void processMatch() throws IOException {
+    //MODIFIES: this.storedMatchData
+    //EFFECT: parse a file containing a MatchData (and its other classes that makes up a MatchData) into storedMatchData
+    private void processMatch() {
 
         System.out.println("Enter the file name");
+        System.out.println("For Phase 1, there are two test parse file in the Project:");
+        System.out.println("test.txt");
+        System.out.println("test2.txt");
         String file = input.next() + "/";
-        MatchData matchData = null;
+        MatchData matchData;
         try {
             matchData = parseMatch(file);
 
-            if (this.storedMatchIDs.contains(matchData.getMatchID())) {
+            assert matchData != null;
+            if (this.storedMatchData.checkContainMatchID(matchData.getMatchID())) {
                 System.out.println("Error: Match Already Imported");
             } else {
                 System.out.println("Match Imported!");
                 System.out.println("Game Played on " + matchData.getMatchDate() + " ID: " + matchData.getMatchID());
-                storedMatches.add(matchData);
-                retrievedStoredID();
+                storedMatchData.addMatchData(matchData);
+
+
             }
 
         } catch (IOException e) {
-            System.out.println("Error: File not Found");
+            System.out.println("Error: File not Found/Does Not Contain the Cancuks");
         }
 
 
     }
 
 
-    //MODIFIES: storedMatches
+    //MODIFIES: this.storedMatchData
     //EFFECT: Drops Selected Match
     private void dropMatch() {
         MatchData match = null;
-        if (this.storedMatches.size() == 0) {
+        if (this.storedMatchData.storedSize() == 0) {
             System.out.println("Error: Currently not Matches are imported");
         } else {
             System.out.println("Enter the ID of the Match you wish to drop");
             Integer id = Integer.parseInt(input.next());
 
-            if (!storedMatchIDs.contains(id)) {
+            if (!this.storedMatchData.checkContainMatchID(id)) {
                 System.out.println("The Match was not imported/ID was entered incorrectly");
             }
 
-            for (MatchData m : this.storedMatches) {
+            for (MatchData m : this.storedMatchData.getStoredMatches()) {
 
 
                 if (m.getMatchID().equals(id)) {
@@ -361,8 +361,7 @@ public class ConsoleInterface {
         }
 
 
-        this.storedMatches.remove(match);
-        retrievedStoredID();
+        this.storedMatchData.dropMatchData(match);
 
     }
 
@@ -375,7 +374,7 @@ public class ConsoleInterface {
 
     private void processEvents(Object o) {
         List<String> events = new ArrayList<>();
-        if (storedMatches.size() == 0) {
+        if (this.storedMatchData.storedSize() == 0) {
             System.out.println("No matches are currently imported");
         } else {
             List<MatchData> matches = matchOptionSelector();
@@ -460,9 +459,9 @@ public class ConsoleInterface {
         }
     }
 
-    //REQUIRES: this.storedMatches != null
+    //REQUIRES: this.storedMatchData != null
     //MODIFIES: None
-    //EFFECT: Retrieve either all matches in storedMatches or select matches form storedMatches
+    //EFFECT: Retrieve either all matches in storedMatchData or select matches form storedMatchData
     private List<MatchData> matchOptionSelector() {
         boolean exit = true;
         List<MatchData> matchList = new ArrayList<>();
@@ -472,15 +471,13 @@ public class ConsoleInterface {
         System.out.println("1: All Games To Date");
         System.out.println("2: Only Selected Games");
 
-        Scanner option = new Scanner(System.in);
-        String selection = option.next();
+        String selection = input.next();
         while (exit) {
             if (selection.equals("1")) {
-                matchList.addAll(this.storedMatches);
+                matchList.addAll(this.storedMatchData.getStoredMatches());
                 exit = false;
 
             } else if (selection.equals("2")) {
-                //else if instead of else has I want to add more options later on.
                 matchList.addAll(retrieveSelectedMatches());
                 exit = false;
             }
@@ -490,7 +487,7 @@ public class ConsoleInterface {
         return matchList;
 
     }
-    //REQUIRES: this.storedMatches != null
+    //REQUIRES: this.storedMatchData != null
     //MODIFIES: None
     //EFFECT: Retrieve select Matches base on matchID
 
@@ -511,7 +508,7 @@ public class ConsoleInterface {
 
                     i = parseStringToID(s);
 
-                    if (checkCorrectIDInput(i)) {
+                    if (this.storedMatchData.checkContainMatchID(i)) {
                         matches.add(retrieveMatchByID(i));
                         exit = false;
 
@@ -528,21 +525,10 @@ public class ConsoleInterface {
         return matches;
     }
 
-    //MODIFIES: this
-    //EFFECT: retrieve all the ID of matches in storeMatches
-    private void retrievedStoredID() {
-
-        this.storedMatchIDs = new ArrayList<>();
-
-        for (MatchData m : storedMatches) {
-            this.storedMatchIDs.add(m.getMatchID());
-        }
-
-    }
 
     private void printStoreMatchID() {
         System.out.print("\n");
-        for (Integer i : storedMatchIDs) {
+        for (Integer i : this.storedMatchData.getMatchIDs()) {
             System.out.print(i + "\n");
         }
         System.out.print("\n");
@@ -555,13 +541,11 @@ public class ConsoleInterface {
 
         MatchData match = null;
 
-        for (MatchData m : this.storedMatches) {
+        for (MatchData m : this.storedMatchData.getStoredMatches()) {
             if (m.compareMatchID(i)) {
                 match = m;
                 break;
 
-            } else {
-                continue;
             }
 
 
@@ -580,9 +564,7 @@ public class ConsoleInterface {
         System.out.println("Type the ID of the game you want to retrieve, separated by a comma:\n");
     }
 
-    private boolean checkCorrectIDInput(Integer i) {
-        return storedMatchIDs.contains(i);
-    }
+
 
     private Integer parseStringToID(String s) {
         Integer i = 0;
@@ -600,7 +582,7 @@ public class ConsoleInterface {
     //MODIFIES: None
     //EFFECT: Prints out a Summary of all the imported Matches
     private void processMatchSummary() {
-        for (MatchData m : this.storedMatches) {
+        for (MatchData m : this.storedMatchData.getStoredMatches()) {
             List<Integer> counts = countShotEvents(m);
             Integer block = counts.get(0);
             Integer shots = counts.get(1);

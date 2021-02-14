@@ -1,0 +1,135 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MatchData</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MatchData (model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MatchData</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (2/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    63.6%
+  </span>
+  <span class="absValue">
+    (7/ 11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;//CONSIDER FOR DELETION
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;package model;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.util.List;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;//Object for the JSON to parse to
+<i>10</i>&nbsp;public class MatchData {
+<i>11</i>&nbsp;    private GameData gameData;
+<i>12</i>&nbsp;    private List&lt;LiveData&gt; allLiveData;
+<i>13</i>&nbsp;    //The offical ID for the match, per NHL API
+<i>14</i>&nbsp;    private Integer matchID;
+<i>15</i>&nbsp;    //For filtering games withing certain date
+<i>16</i>&nbsp;    private String matchDate;
+<i>17</i>&nbsp;
+<b class="fc"><i>18</i>&nbsp;    public MatchData(GameData gameData, List&lt;LiveData&gt; allLiveData, Integer matchID, String matchDate) {</b>
+<b class="fc"><i>19</i>&nbsp;        this.gameData = gameData;</b>
+<b class="fc"><i>20</i>&nbsp;        this.allLiveData = allLiveData;</b>
+<b class="fc"><i>21</i>&nbsp;        this.matchID = matchID;</b>
+<b class="fc"><i>22</i>&nbsp;        this.matchDate = matchDate;</b>
+<i>23</i>&nbsp;
+<b class="fc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    public GameData getGameData() {
+<b class="nc"><i>27</i>&nbsp;        return gameData;</b>
+<i>28</i>&nbsp;    }
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    public List&lt;LiveData&gt; getAllLiveData() {
+<b class="nc"><i>33</i>&nbsp;        return allLiveData;</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    public String getMatchDate() {
+<b class="nc"><i>37</i>&nbsp;        return matchDate;</b>
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    public Integer getMatchID() {
+<b class="fc"><i>41</i>&nbsp;        return matchID;</b>
+<i>42</i>&nbsp;    }
+<i>43</i>&nbsp;    //REQUIRES: an integer
+<i>44</i>&nbsp;    //MODIFIES: none
+<i>45</i>&nbsp;    //EFFECT: return true if the given integer matches the matchID
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    public boolean compareMatchID(Integer i) {
+<b class="nc"><i>48</i>&nbsp;        return this.getMatchID().equals(i);</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-02-13 17:08</div>
+</div>
+</body>
+</html>

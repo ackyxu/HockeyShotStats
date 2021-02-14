@@ -1,0 +1,210 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: LiveData</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: LiveData (model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LiveData</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.time.LocalTime;
+<i>4</i>&nbsp;import java.util.List;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;//Parse event from the JSON.
+<i>8</i>&nbsp;public class LiveData {
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;    //player#:name of the player involved in the event
+<i>11</i>&nbsp;    //player#Type: type of even they were involved in (verb of the person doing the event, and being acted on)
+<i>12</i>&nbsp;    private String player0;
+<i>13</i>&nbsp;    private String player0Type;
+<i>14</i>&nbsp;    private String player1;
+<i>15</i>&nbsp;    private String player1Type;
+<i>16</i>&nbsp;    //Team that initiated the event
+<i>17</i>&nbsp;    //team also indicates who did/won the event; the team that took the shot, won the faceoff, hit the other player
+<i>18</i>&nbsp;    private String team;
+<i>19</i>&nbsp;    //Description of event
+<i>20</i>&nbsp;    private String detail;
+<i>21</i>&nbsp;    //The type of even that occured
+<i>22</i>&nbsp;    private String event;
+<i>23</i>&nbsp;    //Shorthand code for the event
+<i>24</i>&nbsp;    private String eventType;
+<i>25</i>&nbsp;    //Period the event happened in
+<i>26</i>&nbsp;    private int period;
+<i>27</i>&nbsp;    //Period type the even happened in (Regular, Overtime)
+<i>28</i>&nbsp;    private String periodType;
+<i>29</i>&nbsp;    // Time when the event happened
+<i>30</i>&nbsp;    private LocalTime periodTime;
+<i>31</i>&nbsp;    //The next two fields are coordinates.  if coorX == coorY == 999, the LiveData has no
+<i>32</i>&nbsp;    //coordinates (i.e Period Start, Period End)
+<i>33</i>&nbsp;    //from https://community.rapidminer.com/discussion/44904/using-the-nhl-api-to-analyze-pro-ice-hockey-data-part-1
+<i>34</i>&nbsp;    // Range of coorX: -42.5 to 42.5
+<i>35</i>&nbsp;    // Range of coorY: -100  to 100
+<i>36</i>&nbsp;    private Integer coorX;
+<i>37</i>&nbsp;    private Integer coorY;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    //REQUIRE: coorX [-42.5, 42.5] coorY [-100,100]
+<i>42</i>&nbsp;    public LiveData(String player0, String player0Type, String player1, String player1Type, String team,
+<i>43</i>&nbsp;                    String detail, String event, String eventType, int period, String periodType, LocalTime periodTime,
+<b class="nc"><i>44</i>&nbsp;                    int coorX, int coorY) {</b>
+<i>45</i>&nbsp;
+<b class="nc"><i>46</i>&nbsp;        this.player0 = player0;</b>
+<b class="nc"><i>47</i>&nbsp;        this.player0Type = player0Type;</b>
+<b class="nc"><i>48</i>&nbsp;        this.player1 = player1;</b>
+<b class="nc"><i>49</i>&nbsp;        this.player1Type  = player1Type;</b>
+<b class="nc"><i>50</i>&nbsp;        this.team = team;</b>
+<b class="nc"><i>51</i>&nbsp;        this.detail  = detail;</b>
+<b class="nc"><i>52</i>&nbsp;        this.event  = event;</b>
+<b class="nc"><i>53</i>&nbsp;        this.eventType  = eventType;</b>
+<b class="nc"><i>54</i>&nbsp;        this.period  = period;</b>
+<b class="nc"><i>55</i>&nbsp;        this.periodType  = periodType;</b>
+<b class="nc"><i>56</i>&nbsp;        this.periodTime  = periodTime;</b>
+<b class="nc"><i>57</i>&nbsp;        this.coorX  = coorX;</b>
+<b class="nc"><i>58</i>&nbsp;        this.coorY  = coorY;</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    public String getPlayer0() {
+<b class="nc"><i>63</i>&nbsp;        return player0;</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    public String getPlayer0Type() {
+<b class="nc"><i>67</i>&nbsp;        return player0Type;</b>
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    public String getPlayer1() {
+<b class="nc"><i>71</i>&nbsp;        return player1;</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    public String getPlayer1Type() {
+<b class="nc"><i>75</i>&nbsp;        return player1Type;</b>
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    public String getTeam() {
+<b class="nc"><i>79</i>&nbsp;        return team;</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    public String getDetail() {
+<b class="nc"><i>83</i>&nbsp;        return detail;</b>
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    public String getEvent() {
+<b class="nc"><i>87</i>&nbsp;        return event;</b>
+<i>88</i>&nbsp;    }
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    public String getEventType() {
+<b class="nc"><i>91</i>&nbsp;        return eventType;</b>
+<i>92</i>&nbsp;    }
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    public int getPeriod() {
+<b class="nc"><i>95</i>&nbsp;        return period;</b>
+<i>96</i>&nbsp;    }
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    public String getPeriodType() {
+<b class="nc"><i>99</i>&nbsp;        return periodType;</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    public LocalTime getPeriodTime() {
+<b class="nc"><i>103</i>&nbsp;        return periodTime;</b>
+<i>104</i>&nbsp;    }
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    public Integer getCoorX() {
+<b class="nc"><i>107</i>&nbsp;        return coorX;</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    public Integer getCoorY() {
+<b class="nc"><i>111</i>&nbsp;        return coorY;</b>
+<i>112</i>&nbsp;    }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    //MODIFIES: None
+<i>115</i>&nbsp;    //EFFECT: one part of a method overloading; return true if EventType equals s
+<i>116</i>&nbsp;    public boolean filterEvent(String s) {
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;        return team.equals(&quot;VAN&quot;) &amp;&amp; eventType.equals(s);</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    //MODIFIES: None
+<i>122</i>&nbsp;    //EFFECT: one part of a method overloading; returns true if EventType is in los
+<i>123</i>&nbsp;    public boolean filterEvent(List&lt;String&gt; los) {
+<i>124</i>&nbsp;
+<b class="nc"><i>125</i>&nbsp;        return team.equals(&quot;VAN&quot;) &amp;&amp; los.contains(eventType);</b>
+<i>126</i>&nbsp;    }
+<i>127</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2021-02-13 17:08</div>
+</div>
+</body>
+</html>
