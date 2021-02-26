@@ -50,4 +50,7 @@ The JSON contains multiple nested objects, but this program (as of now) is only 
 - As a user, I want to be able to retrieve all the shot events by the Canucks  from the matches I stored in the program, with the option to select just goals or all Shot Events with the coordinate of where the event originated
 - As a user, I want to be able to retrieve a boxscore summary of the games in StoredMatchData
 
-
+*For Phase 2 of the Project:*
+- As a user, I want to be able to retrieve all the matches I previous imported in a past session of the program.
+- As a user, I want to be able to save all the matches I retrieve in the current session, so I won't need to call to retrieve the matches again in the future sessions.
+- As a user, I want to be able to have a option to save my current session of matches or not, and option to load a different session (for different a hockey season)
