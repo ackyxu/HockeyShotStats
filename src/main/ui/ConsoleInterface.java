@@ -19,6 +19,7 @@ import java.util.Scanner;
 
 public class ConsoleInterface {
     private static final String JSON_STORE = "./data/";
+    private static final String JSON_IMPORT = "./data/imports/";
     StoredMatchData storedMatchData;
     List<String> shotEvents;
     private Scanner input;
@@ -420,7 +421,7 @@ public class ConsoleInterface {
 
     private void processTest() {
         System.out.println("Enter the name of the game you wish to import");
-        String file = "./imports/" + input.next();
+        String file = JSON_IMPORT + input.next();
         matchImport = new JsonImport(file);
 
         try {
@@ -431,6 +432,8 @@ public class ConsoleInterface {
         } catch (CanucksNotInImport canucksNotInImport) {
             System.out.println("Oops! Looks like the Canucks did not play in that game!");
         }
+
+        System.out.println("Great Success!");
     }
 
 

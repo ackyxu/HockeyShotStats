@@ -39,7 +39,7 @@ class MatchTest {
 
     private JsonImport matchImport;
 
-    String JSON_IMPORT = "./imports/";
+    String JSON_IMPORT = "./data/imports/";
     String JSON_STORE = "./data/";
 
     @BeforeEach
