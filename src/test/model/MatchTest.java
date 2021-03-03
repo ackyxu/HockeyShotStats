@@ -36,11 +36,9 @@ class MatchTest {
     MatchData matchData2;
 
     List<String> shotEvents = new ArrayList<>();
-
-    private JsonImport matchImport;
-
     String JSON_IMPORT = "./data/imports/";
     String JSON_STORE = "./data/";
+    private JsonImport matchImport;
 
     @BeforeEach
     void setup() {
@@ -84,8 +82,6 @@ class MatchTest {
         shotEvents.add("SHOT");
         shotEvents.add("MISSED_SHOT");
         shotEvents.add("GOAL");
-
-
 
 
     }
@@ -354,7 +350,7 @@ class MatchTest {
     }
 
     @Test
-    //testMainEDM contains is the same game as matchData1, but in the offical JSON format from NHL API
+        //testMainEDM contains is the same game as matchData1, but in the offical JSON format from NHL API
     void testMatchFromJsonImport() {
 
         //StoredMatchData testStore = new StoredMatchData();
@@ -388,7 +384,6 @@ class MatchTest {
         assertEquals(test2A.getCoorY(), test2B.getCoorY());
 
 
-
     }
 
     @Test
@@ -411,7 +406,6 @@ class MatchTest {
         assertEquals(testMatch, null);
 
     }
-
 
 
     @Test
@@ -437,8 +431,8 @@ class MatchTest {
     }
 
     @Test
-    //Should produce 1:1 equal compared to storeMatchData
-    void testSaveLoad1StoredMatch () {
+        //Should produce 1:1 equal compared to storeMatchData
+    void testSaveLoad1StoredMatch() {
         storedMatchData.addMatchData(matchData1);
         StoredMatchData loadedStoredMatches = null;
         JsonWriter writer = new JsonWriter(JSON_STORE + "test1match.json");
@@ -468,11 +462,10 @@ class MatchTest {
                 storedMatchData.getStoredMatches().get(0).getAllLiveData().get(0).getEventType());
 
 
-
     }
 
     @Test
-    void testSaveLoad2StoredMatch () {
+    void testSaveLoad2StoredMatch() {
         storedMatchData.addMatchData(matchData1);
         storedMatchData.addMatchData(matchData2);
         StoredMatchData loadedStoredMatches = null;
@@ -529,7 +522,30 @@ class MatchTest {
 
     }
 
+    @Test
+        //Since JSON is not structured, some events may not contain the field required for MatchData
+        //To test JSONException catch
+    void testImportMatchWithNullObjects() {
 
+
+        MatchData testMatch = null;
+        this.matchImport = new JsonImport(JSON_IMPORT + "testNullObjects.json");
+
+        try {
+            testMatch = matchImport.read();
+        } catch (IOException e) {
+            fail("File should exists");
+        } catch (CanucksNotInImport canucksNotInImport) {
+            fail("Match should contain the Canuck");
+        }
+
+        assertEquals(null, testMatch.getAllLiveData().get(0).getCoorX());
+        assertEquals(null, testMatch.getAllLiveData().get(0).getCoorY());
+        assertEquals(" ", testMatch.getAllLiveData().get(0).getPlayer0());
+        assertEquals(" ", testMatch.getAllLiveData().get(0).getPlayer1());
+
+
+    }
 
 
 }
