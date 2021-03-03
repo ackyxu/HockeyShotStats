@@ -1,14 +1,18 @@
-//CONSIDER FOR DELETION
+
 
 
 package model;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.JsonMethods;
+
 import java.util.ArrayList;
 import java.util.List;
 
 //Object for the JSON to parse to
-public class MatchData {
+public class MatchData implements JsonMethods {
     private GameData gameData;
     private List<LiveData> allLiveData;
     //The offical ID for the match, per NHL API
@@ -90,5 +94,31 @@ public class MatchData {
         return events;
 
 
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        json.put("gameData", this.gameData.toJson());
+        json.put("allLiveData", liveDataToJson());
+        json.put("matchID", this.matchID);
+        json.put("matchDate", this.matchDate);
+
+
+        return json;
+    }
+
+    private JSONArray liveDataToJson() {
+
+        JSONArray array = new JSONArray();
+
+        for (LiveData l: this.allLiveData) {
+
+            array.put(l.toJson());
+
+        }
+
+        return array;
     }
 }

@@ -1,5 +1,9 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.JsonMethods;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +11,7 @@ import java.util.List;
 //REQUIRE: size of storedMatches and matchID is the same at all times, as it is a tandem list to represent the stored
 //         MatchData and the matches' matchID
 
-public class StoredMatchData {
+public class StoredMatchData implements JsonMethods {
 
     private List<MatchData> storedMatches;
     private List<Integer> matchIDs;
@@ -20,6 +24,15 @@ public class StoredMatchData {
         this.storedMatches = storedMatches;
         this.matchIDs = matchIDs;
     }
+
+    //TODO Maybe delete
+//    //REQUIRE: None
+//    //EFFECT: Construct a new StoredMatchData from persistence file
+//    public StoredMatchData(List<MatchData> storedMatches, List<Integer> matchIDs) {
+//
+//        this.storedMatches = storedMatches;
+//        this.matchIDs = matchIDs;
+//    }
 
     public List<MatchData> getStoredMatches() {
         return storedMatches;
@@ -68,6 +81,46 @@ public class StoredMatchData {
             this.matchIDs.add(m.getMatchID());
         }
 
+    }
+
+
+
+    @Override
+    public JSONObject toJson() {
+
+        JSONObject json = new JSONObject();
+
+        json.put("storedMatches", matchDataToJson());
+        json.put("storedId", matchIdToJson());
+
+        return json;
+
+    }
+
+    private JSONArray matchDataToJson() {
+        JSONArray storedMatchesJson = new JSONArray();
+
+        for (MatchData m: this.storedMatches) {
+
+            storedMatchesJson.put(m.toJson());
+
+        }
+
+        return storedMatchesJson;
+
+    }
+
+    private JSONArray matchIdToJson() {
+        JSONArray storedIdJson = new JSONArray();
+
+        for (Integer id: this.matchIDs) {
+
+            storedIdJson.put(id);
+
+
+        }
+
+        return storedIdJson;
     }
 
 

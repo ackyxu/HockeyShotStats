@@ -50,18 +50,18 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    62.5%
+    72.7%
   </span>
   <span class="absValue">
-    (5/ 8)
+    (8/ 11)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    76.2%
+    60%
   </span>
   <span class="absValue">
-    (16/ 21)
+    (21/ 35)
   </span>
 </td>
 </tr>
@@ -74,79 +74,137 @@
 
 <div class="sourceCode"><i>1</i>&nbsp;package model;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import java.util.ArrayList;
-<i>4</i>&nbsp;import java.util.List;
-<i>5</i>&nbsp;
-<i>6</i>&nbsp;public class StoredMatchData {
-<i>7</i>&nbsp;
-<i>8</i>&nbsp;    private List&lt;MatchData&gt; storedMatches;
-<i>9</i>&nbsp;    private List&lt;Integer&gt; matchIDs;
-<i>10</i>&nbsp;
-<b class="fc"><i>11</i>&nbsp;    public StoredMatchData() {</b>
-<b class="fc"><i>12</i>&nbsp;        List&lt;MatchData&gt; storedMatches = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i>13</i>&nbsp;        List&lt;Integer&gt; matchIDs = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i>14</i>&nbsp;        this.storedMatches = storedMatches;</b>
-<b class="fc"><i>15</i>&nbsp;        this.matchIDs = matchIDs;</b>
-<b class="fc"><i>16</i>&nbsp;    }</b>
-<i>17</i>&nbsp;
-<i>18</i>&nbsp;    public List&lt;MatchData&gt; getStoredMatches() {
-<b class="nc"><i>19</i>&nbsp;        return storedMatches;</b>
-<i>20</i>&nbsp;    }
-<i>21</i>&nbsp;
-<i>22</i>&nbsp;
-<i>23</i>&nbsp;    public List&lt;Integer&gt; getMatchIDs() {
-<b class="nc"><i>24</i>&nbsp;        return matchIDs;</b>
-<i>25</i>&nbsp;    }
-<i>26</i>&nbsp;
-<i>27</i>&nbsp;    //MODIFIES: This
-<i>28</i>&nbsp;    //EFFECT: Add a MatchData to StoredMatchData
-<i>29</i>&nbsp;    public void addMatchData(MatchData m) {
-<b class="fc"><i>30</i>&nbsp;        this.storedMatches.add(m);</b>
-<b class="fc"><i>31</i>&nbsp;        this.refreshStoredID();</b>
-<b class="fc"><i>32</i>&nbsp;    }</b>
-<i>33</i>&nbsp;
-<i>34</i>&nbsp;    //MODIFIES: This
-<i>35</i>&nbsp;    //EFFECT: Drop a MatchData to StoredMatchData
-<i>36</i>&nbsp;    public void dropMatchData(MatchData m) {
-<b class="nc"><i>37</i>&nbsp;        this.storedMatches.remove(m);</b>
-<b class="nc"><i>38</i>&nbsp;        this.refreshStoredID();</b>
-<b class="nc"><i>39</i>&nbsp;    }</b>
+<i>3</i>&nbsp;import org.json.JSONArray;
+<i>4</i>&nbsp;import org.json.JSONObject;
+<i>5</i>&nbsp;import persistence.JsonMethods;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.util.ArrayList;
+<i>8</i>&nbsp;import java.util.List;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;//The Class that stores all the MatchData imported into the program, with a list of matchIDs
+<i>11</i>&nbsp;//REQUIRE: size of storedMatches and matchID is the same at all times, as it is a tandem list to represent the stored
+<i>12</i>&nbsp;//         MatchData and the matches&#39; matchID
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;public class StoredMatchData implements JsonMethods {
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    private List&lt;MatchData&gt; storedMatches;
+<i>17</i>&nbsp;    private List&lt;Integer&gt; matchIDs;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    //REQUIRE: None
+<i>20</i>&nbsp;    //EFFECT: Construct a new StoredMatchData with both field being an empty list.
+<b class="fc"><i>21</i>&nbsp;    public StoredMatchData() {</b>
+<b class="fc"><i>22</i>&nbsp;        List&lt;MatchData&gt; storedMatches = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>23</i>&nbsp;        List&lt;Integer&gt; matchIDs = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>24</i>&nbsp;        this.storedMatches = storedMatches;</b>
+<b class="fc"><i>25</i>&nbsp;        this.matchIDs = matchIDs;</b>
+<b class="fc"><i>26</i>&nbsp;    }</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    //TODO Maybe delete
+<i>29</i>&nbsp;//    //REQUIRE: None
+<i>30</i>&nbsp;//    //EFFECT: Construct a new StoredMatchData from persistence file
+<i>31</i>&nbsp;//    public StoredMatchData(List&lt;MatchData&gt; storedMatches, List&lt;Integer&gt; matchIDs) {
+<i>32</i>&nbsp;//
+<i>33</i>&nbsp;//        this.storedMatches = storedMatches;
+<i>34</i>&nbsp;//        this.matchIDs = matchIDs;
+<i>35</i>&nbsp;//    }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public List&lt;MatchData&gt; getStoredMatches() {
+<b class="fc"><i>38</i>&nbsp;        return storedMatches;</b>
+<i>39</i>&nbsp;    }
 <i>40</i>&nbsp;
-<i>41</i>&nbsp;    //MODIFIES: None
-<i>42</i>&nbsp;    //EFFECT: Return the size of storedMatches
-<i>43</i>&nbsp;
-<i>44</i>&nbsp;    public Integer storedSize() {
-<b class="fc"><i>45</i>&nbsp;        return this.storedMatches.size();</b>
-<i>46</i>&nbsp;    }
-<i>47</i>&nbsp;
-<i>48</i>&nbsp;
-<i>49</i>&nbsp;
-<i>50</i>&nbsp;    //MODIFIES: None
-<i>51</i>&nbsp;    //EFFECT: Return True if our StoredMatchData Contains the given match ID
-<i>52</i>&nbsp;    public boolean checkContainMatchID(Integer i) {
-<b class="fc"><i>53</i>&nbsp;        return this.matchIDs.contains(i);</b>
-<i>54</i>&nbsp;    }
-<i>55</i>&nbsp;
-<i>56</i>&nbsp;    //MODIFIES: this
-<i>57</i>&nbsp;    //EFFECT: Refresh the storeMatchIDs to ensure that it only contains the ones in the storeMatchData
-<i>58</i>&nbsp;    private void refreshStoredID() {
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    public List&lt;Integer&gt; getMatchIDs() {
+<b class="fc"><i>43</i>&nbsp;        return matchIDs;</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    //MODIFIES: This
+<i>47</i>&nbsp;    //EFFECT: Add a MatchData to StoredMatchData
+<i>48</i>&nbsp;    public void addMatchData(MatchData m) {
+<b class="fc"><i>49</i>&nbsp;        this.storedMatches.add(m);</b>
+<b class="fc"><i>50</i>&nbsp;        this.refreshStoredID();</b>
+<b class="fc"><i>51</i>&nbsp;    }</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    //MODIFIES: This
+<i>54</i>&nbsp;    //EFFECT: Drop a MatchData to StoredMatchData
+<i>55</i>&nbsp;    public void dropMatchData(MatchData m) {
+<b class="fc"><i>56</i>&nbsp;        this.storedMatches.remove(m);</b>
+<b class="fc"><i>57</i>&nbsp;        this.refreshStoredID();</b>
+<b class="fc"><i>58</i>&nbsp;    }</b>
 <i>59</i>&nbsp;
-<b class="fc"><i>60</i>&nbsp;        this.matchIDs = new ArrayList&lt;&gt;();</b>
-<i>61</i>&nbsp;
-<b class="fc"><i>62</i>&nbsp;        for (MatchData m : storedMatches) {</b>
-<b class="fc"><i>63</i>&nbsp;            this.matchIDs.add(m.getMatchID());</b>
-<b class="fc"><i>64</i>&nbsp;        }</b>
-<i>65</i>&nbsp;
-<b class="fc"><i>66</i>&nbsp;    }</b>
-<i>67</i>&nbsp;
-<i>68</i>&nbsp;
-<i>69</i>&nbsp;}
+<i>60</i>&nbsp;    //MODIFIES: None
+<i>61</i>&nbsp;    //EFFECT: Return the size of storedMatches
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    public Integer storedSize() {
+<b class="fc"><i>64</i>&nbsp;        return this.storedMatches.size();</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    //REQUIRE: the given i is in the same format as MatchData.matchId
+<i>68</i>&nbsp;    //MODIFIES: None
+<i>69</i>&nbsp;    //EFFECT: Return True if our StoredMatchData Contains the given match ID
+<i>70</i>&nbsp;    public boolean checkContainMatchID(Integer i) {
+<b class="fc"><i>71</i>&nbsp;        return this.matchIDs.contains(i);</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    //MODIFIES: this
+<i>75</i>&nbsp;    //EFFECT: Refresh the storeMatchIDs to ensure that it only contains the ones in the storeMatchData
+<i>76</i>&nbsp;    private void refreshStoredID() {
+<i>77</i>&nbsp;
+<b class="fc"><i>78</i>&nbsp;        this.matchIDs = new ArrayList&lt;&gt;();</b>
+<i>79</i>&nbsp;
+<b class="fc"><i>80</i>&nbsp;        for (MatchData m : storedMatches) {</b>
+<b class="fc"><i>81</i>&nbsp;            this.matchIDs.add(m.getMatchID());</b>
+<b class="fc"><i>82</i>&nbsp;        }</b>
+<i>83</i>&nbsp;
+<b class="fc"><i>84</i>&nbsp;    }</b>
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    @Override
+<i>89</i>&nbsp;    public JSONObject toJson() {
+<i>90</i>&nbsp;
+<b class="nc"><i>91</i>&nbsp;        JSONObject json = new JSONObject();</b>
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;        json.put(&quot;storedMatches&quot;, matchDataToJson());</b>
+<b class="nc"><i>94</i>&nbsp;        json.put(&quot;storedId&quot;, matchIdToJson());</b>
+<i>95</i>&nbsp;
+<b class="nc"><i>96</i>&nbsp;        return json;</b>
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    private JSONArray matchDataToJson() {
+<b class="nc"><i>101</i>&nbsp;        JSONArray storedMatchesJson = new JSONArray();</b>
+<i>102</i>&nbsp;
+<b class="nc"><i>103</i>&nbsp;        for (MatchData m: this.storedMatches) {</b>
+<i>104</i>&nbsp;
+<b class="nc"><i>105</i>&nbsp;            storedMatchesJson.put(m.toJson());</b>
+<i>106</i>&nbsp;
+<b class="nc"><i>107</i>&nbsp;        }</b>
+<i>108</i>&nbsp;
+<b class="nc"><i>109</i>&nbsp;        return storedMatchesJson;</b>
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    private JSONArray matchIdToJson() {
+<b class="nc"><i>114</i>&nbsp;        JSONArray storedIdJson = new JSONArray();</b>
+<i>115</i>&nbsp;
+<b class="nc"><i>116</i>&nbsp;        for (Integer id: this.matchIDs) {</b>
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;            storedIdJson.put(id);</b>
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;
+<b class="nc"><i>121</i>&nbsp;        }</b>
+<i>122</i>&nbsp;
+<b class="nc"><i>123</i>&nbsp;        return storedIdJson;</b>
+<i>124</i>&nbsp;    }
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-02-13 22:43</div>
+    <div style="float:right;">generated on 2021-03-03 11:41</div>
 </div>
 </body>
 </html>

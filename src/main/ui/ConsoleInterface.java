@@ -1,8 +1,13 @@
 package ui;
 
+import exceptions.CanucksNotInImport;
 import model.*;
+import persistence.JsonImport;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -13,10 +18,12 @@ import java.util.Scanner;
 
 
 public class ConsoleInterface {
+    private static final String JSON_STORE = "./data/";
     StoredMatchData storedMatchData;
     List<String> shotEvents;
     private Scanner input;
     private String team;
+    private JsonImport matchImport;
 
     public ConsoleInterface() {
 
@@ -48,7 +55,52 @@ public class ConsoleInterface {
         this.shotEvents.add("SHOT");
         this.shotEvents.add("MISSED_SHOT");
         this.shotEvents.add("GOAL");
+
+        loadOptions();
     }
+
+    private void loadStoredMatches() {
+        System.out.println("Enter the file name you wish to load");
+        String option = this.input.next();
+
+        JsonReader reader = new JsonReader(JSON_STORE + option + ".json");
+
+        try {
+            this.storedMatchData = reader.read();
+            System.out.println("Loaded from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+
+    }
+
+    private void loadOptions() {
+
+        Boolean keepGoing = true;
+
+        while (keepGoing) {
+
+            System.out.println("Do you wish to load an saved Matches file? (y/n)");
+            String option = this.input.next();
+
+            if (option.equals("y")) {
+
+                loadStoredMatches();
+
+                keepGoing = false;
+
+            } else if (option.equals("n")) {
+
+                keepGoing = false;
+
+            } else {
+
+                System.out.println("Error: please type y or n to select your choice!");
+            }
+        }
+    }
+
+
 
     //MODIFIES: None
     //EFFECT: Process the options selected from displayMenu() in Console Interface
@@ -66,6 +118,8 @@ public class ConsoleInterface {
             processSummaryOptions();
 
         } else if (option.equals("4")) {
+
+            processExitOptions();
 
             System.out.println("\nShutting Down");
 
@@ -98,6 +152,8 @@ public class ConsoleInterface {
         System.out.println("1: Import Match");
         System.out.println("2: Drop Match");
         System.out.println("3: Return to Main Menu");
+        System.out.println("4: Test");
+
 
     }
 
@@ -119,6 +175,10 @@ public class ConsoleInterface {
 
             System.out.println("\n");
 
+        } else if (option.equals("4")) {
+
+            processTest();
+
         } else {
             System.out.println("Unrecognized Input");
         }
@@ -127,7 +187,7 @@ public class ConsoleInterface {
     }
 
 
-    //MODIFIES: None
+    //MODIFIES: none
     //EFFECT: Opens and process the submenu for events related options
 
     private void processEventOptions() {
@@ -200,6 +260,39 @@ public class ConsoleInterface {
         }
 
 
+    }
+
+    private void processExitOptions() {
+
+        Boolean keepGoing = true;
+
+
+        while (keepGoing) {
+
+            displayExitMenu();
+            String option = this.input.next();
+
+            if (option.equals("y")) {
+
+                saveStoreMatches();
+
+                keepGoing = false;
+
+            } else if (option.equals("n")) {
+
+                keepGoing = false;
+
+            } else {
+
+                System.out.println("Error: please type y or n to select your choice!");
+            }
+
+        }
+
+    }
+
+    private void displayExitMenu() {
+        System.out.println("Do you wish to save the Stored Matches? (y/n)");
     }
 
 
@@ -325,8 +418,23 @@ public class ConsoleInterface {
 
     }
 
+    private void processTest() {
+        System.out.println("Enter the name of the game you wish to import");
+        String file = "./imports/" + input.next();
+        matchImport = new JsonImport(file);
 
-    //MODIFIES: this.storedMatchData
+        try {
+            this.storedMatchData.addMatchData(matchImport.read());
+
+        } catch (IOException e) {
+            System.out.println("Error: File not found \n please check the name of the file you fish to import");
+        } catch (CanucksNotInImport canucksNotInImport) {
+            System.out.println("Oops! Looks like the Canucks did not play in that game!");
+        }
+    }
+
+
+        //MODIFIES: this.storedMatchData
     //EFFECT: Drops Selected Match
     private void dropMatch() {
         MatchData match = null;
@@ -621,6 +729,27 @@ public class ConsoleInterface {
 
         System.out.println("Please Enter the Number of the Option:");
     }
+
+    private void saveStoreMatches() {
+
+        System.out.println("Please enter the name you wish to save the file as:");
+        String file = input.next();
+        JsonWriter writer = new JsonWriter(JSON_STORE + file + ".json");
+
+
+        try {
+            writer.open();
+            writer.write(this.storedMatchData);
+            writer.close();
+            System.out.println("Saved to " + JSON_STORE);
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+
+
+    }
+
 
 
 }

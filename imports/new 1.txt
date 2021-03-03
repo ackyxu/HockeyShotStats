@@ -1,0 +1,113 @@
+2204
+4374
+{
+        "players" : [ {
+          "player" : {
+            "id" : 8480012,
+            "fullName" : "Elias Pettersson",
+            "link" : "/api/v1/people/8480012"
+          },
+          "playerType" : "Hitter"
+        }, {
+          "player" : {
+            "id" : 8478452,
+            "fullName" : "Caleb Jones",
+            "link" : "/api/v1/people/8478452"
+          },
+          "playerType" : "Hittee"
+        } ],
+        "result" : {
+          "event" : "Hit",
+          "eventCode" : "EDM64",
+          "eventTypeId" : "HIT",
+          "description" : "Elias Pettersson hit Caleb Jones"
+        },
+        "about" : {
+          "eventIdx" : 17,
+          "eventId" : 64,
+          "period" : 1,
+          "periodType" : "REGULAR",
+          "ordinalNum" : "1st",
+          "periodTime" : "03:30",
+          "periodTimeRemaining" : "16:30",
+          "dateTime" : "2021-01-14T03:20:22Z",
+          "goals" : {
+            "away" : 0,
+            "home" : 0
+          }
+        },
+        "coordinates" : {
+          "x" : 6.0,
+          "y" : 36.0
+        },
+        "team" : {
+          "id" : 23,
+          "name" : "Vancouver Canucks",
+          "link" : "/api/v1/teams/23",
+          "triCode" : "VAN"
+        }
+      },
+	  {
+        "players" : [ {
+          "player" : {
+            "id" : 8477500,
+            "fullName" : "Bo Horvat",
+            "link" : "/api/v1/people/8477500"
+          },
+          "playerType" : "Scorer",
+          "seasonTotal" : 1
+        }, {
+          "player" : {
+            "id" : 8476871,
+            "fullName" : "Tanner Pearson",
+            "link" : "/api/v1/people/8476871"
+          },
+          "playerType" : "Assist",
+          "seasonTotal" : 1
+        }, {
+          "player" : {
+            "id" : 8475156,
+            "fullName" : "Mikko Koskinen",
+            "link" : "/api/v1/people/8475156"
+          },
+          "playerType" : "Goalie"
+        } ],
+        "result" : {
+          "event" : "Goal",
+          "eventCode" : "EDM143",
+          "eventTypeId" : "GOAL",
+          "description" : "Bo Horvat (1) Wrist Shot, assists: Tanner Pearson (1)",
+          "secondaryType" : "Wrist Shot",
+          "strength" : {
+            "code" : "EVEN",
+            "name" : "Even"
+          },
+          "gameWinningGoal" : false,
+          "emptyNet" : false
+        },
+        "about" : {
+          "eventIdx" : 68,
+          "eventId" : 143,
+          "period" : 1,
+          "periodType" : "REGULAR",
+          "ordinalNum" : "1st",
+          "periodTime" : "15:32",
+          "periodTimeRemaining" : "04:28",
+          "dateTime" : "2021-01-14T03:41:49Z",
+          "goals" : {
+            "away" : 1,
+            "home" : 0
+          }
+        },
+        "coordinates" : {
+          "x" : -70.0,
+          "y" : -1.0
+        },
+        "team" : {
+          "id" : 23,
+          "name" : "Vancouver Canucks",
+          "link" : "/api/v1/teams/23",
+          "triCode" : "VAN"
+        }
+      }
+	  

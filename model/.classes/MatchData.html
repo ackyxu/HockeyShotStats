@@ -50,18 +50,18 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    37.5%
+    80%
   </span>
   <span class="absValue">
-    (3/ 8)
+    (8/ 10)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    34.8%
+    67.6%
   </span>
   <span class="absValue">
-    (8/ 23)
+    (23/ 34)
   </span>
 </td>
 </tr>
@@ -72,92 +72,136 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;//CONSIDER FOR DELETION
+<div class="sourceCode"><i>1</i>&nbsp;
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;
 <i>4</i>&nbsp;package model;
 <i>5</i>&nbsp;
 <i>6</i>&nbsp;
-<i>7</i>&nbsp;import java.util.ArrayList;
-<i>8</i>&nbsp;import java.util.List;
-<i>9</i>&nbsp;
-<i>10</i>&nbsp;//Object for the JSON to parse to
-<i>11</i>&nbsp;public class MatchData {
-<i>12</i>&nbsp;    private GameData gameData;
-<i>13</i>&nbsp;    private List&lt;LiveData&gt; allLiveData;
-<i>14</i>&nbsp;    //The offical ID for the match, per NHL API
-<i>15</i>&nbsp;    private Integer matchID;
-<i>16</i>&nbsp;    //For filtering games withing certain date
-<i>17</i>&nbsp;    private String matchDate;
-<i>18</i>&nbsp;
-<b class="fc"><i>19</i>&nbsp;    public MatchData(GameData gameData, List&lt;LiveData&gt; allLiveData, Integer matchID, String matchDate) {</b>
-<b class="fc"><i>20</i>&nbsp;        this.gameData = gameData;</b>
-<b class="fc"><i>21</i>&nbsp;        this.allLiveData = allLiveData;</b>
-<b class="fc"><i>22</i>&nbsp;        this.matchID = matchID;</b>
-<b class="fc"><i>23</i>&nbsp;        this.matchDate = matchDate;</b>
-<i>24</i>&nbsp;
-<b class="fc"><i>25</i>&nbsp;    }</b>
-<i>26</i>&nbsp;
-<i>27</i>&nbsp;    public GameData getGameData() {
-<b class="fc"><i>28</i>&nbsp;        return gameData;</b>
-<i>29</i>&nbsp;    }
+<i>7</i>&nbsp;import org.json.JSONArray;
+<i>8</i>&nbsp;import org.json.JSONObject;
+<i>9</i>&nbsp;import persistence.JsonMethods;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.util.ArrayList;
+<i>12</i>&nbsp;import java.util.List;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;//Object for the JSON to parse to
+<i>15</i>&nbsp;public class MatchData implements JsonMethods {
+<i>16</i>&nbsp;    private GameData gameData;
+<i>17</i>&nbsp;    private List&lt;LiveData&gt; allLiveData;
+<i>18</i>&nbsp;    //The offical ID for the match, per NHL API
+<i>19</i>&nbsp;    private Integer matchID;
+<i>20</i>&nbsp;    //For filtering games withing certain date
+<i>21</i>&nbsp;    private String matchDate;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    //REQUIRES: None
+<i>24</i>&nbsp;    //EFFECT: Construct a MatchData
+<b class="fc"><i>25</i>&nbsp;    public MatchData(GameData gameData, List&lt;LiveData&gt; allLiveData, Integer matchID, String matchDate) {</b>
+<b class="fc"><i>26</i>&nbsp;        this.gameData = gameData;</b>
+<b class="fc"><i>27</i>&nbsp;        this.allLiveData = allLiveData;</b>
+<b class="fc"><i>28</i>&nbsp;        this.matchID = matchID;</b>
+<b class="fc"><i>29</i>&nbsp;        this.matchDate = matchDate;</b>
 <i>30</i>&nbsp;
-<i>31</i>&nbsp;
-<i>32</i>&nbsp;    public List&lt;LiveData&gt; getAllLiveData() {
-<b class="nc"><i>33</i>&nbsp;        return allLiveData;</b>
-<i>34</i>&nbsp;    }
-<i>35</i>&nbsp;
-<i>36</i>&nbsp;    public String getMatchDate() {
-<b class="nc"><i>37</i>&nbsp;        return matchDate;</b>
-<i>38</i>&nbsp;    }
-<i>39</i>&nbsp;
-<i>40</i>&nbsp;    public Integer getMatchID() {
-<b class="fc"><i>41</i>&nbsp;        return matchID;</b>
-<i>42</i>&nbsp;    }
-<i>43</i>&nbsp;    //REQUIRES: an integer
-<i>44</i>&nbsp;    //MODIFIES: none
-<i>45</i>&nbsp;    //EFFECT: return true if the given integer matches the matchID
-<i>46</i>&nbsp;
-<i>47</i>&nbsp;    public boolean compareMatchID(Integer i) {
-<b class="nc"><i>48</i>&nbsp;        return this.getMatchID().equals(i);</b>
-<i>49</i>&nbsp;    }
-<i>50</i>&nbsp;
-<i>51</i>&nbsp;    public List&lt;LiveData&gt; getFilteredEvent(String filter, String s) {
-<i>52</i>&nbsp;
-<b class="nc"><i>53</i>&nbsp;        List&lt;LiveData&gt; events = new ArrayList&lt;&gt;();</b>
-<i>54</i>&nbsp;
-<b class="nc"><i>55</i>&nbsp;        for (LiveData l : this.getAllLiveData()) {</b>
-<b class="nc"><i>56</i>&nbsp;            if (l.filterEvent(filter, s)) {</b>
-<b class="nc"><i>57</i>&nbsp;                events.add(l);</b>
-<i>58</i>&nbsp;            }
-<b class="nc"><i>59</i>&nbsp;        }</b>
-<i>60</i>&nbsp;
-<b class="nc"><i>61</i>&nbsp;        return events;</b>
-<i>62</i>&nbsp;
-<i>63</i>&nbsp;
-<i>64</i>&nbsp;    }
-<i>65</i>&nbsp;
-<i>66</i>&nbsp;    public List&lt;LiveData&gt; getFilteredEvent(String filter, List&lt;String&gt; los) {
-<i>67</i>&nbsp;
-<b class="nc"><i>68</i>&nbsp;        List&lt;LiveData&gt; events = new ArrayList&lt;&gt;();</b>
-<i>69</i>&nbsp;
-<b class="nc"><i>70</i>&nbsp;        for (LiveData l : this.getAllLiveData()) {</b>
-<b class="nc"><i>71</i>&nbsp;            if (l.filterEvent(filter, los)) {</b>
-<b class="nc"><i>72</i>&nbsp;                events.add(l);</b>
-<i>73</i>&nbsp;            }
-<b class="nc"><i>74</i>&nbsp;        }</b>
+<b class="fc"><i>31</i>&nbsp;    }</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public GameData getGameData() {
+<b class="fc"><i>34</i>&nbsp;        return gameData;</b>
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    public List&lt;LiveData&gt; getAllLiveData() {
+<b class="fc"><i>39</i>&nbsp;        return allLiveData;</b>
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    public String getMatchDate() {
+<b class="fc"><i>43</i>&nbsp;        return matchDate;</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    public Integer getMatchID() {
+<b class="fc"><i>47</i>&nbsp;        return matchID;</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    //REQUIRES: an integer that represent a matchID, or in the same format
+<i>51</i>&nbsp;    //MODIFIES: none
+<i>52</i>&nbsp;    //EFFECT: return true if the given integer matches the matchID
+<i>53</i>&nbsp;    public boolean compareMatchID(Integer i) {
+<b class="fc"><i>54</i>&nbsp;        return this.getMatchID().equals(i);</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    //REQUIRE: given filter is in the same format as GameData.Team.teamAbr, s is an EventType found in LiveData
+<i>60</i>&nbsp;    //MODIFIES: None
+<i>61</i>&nbsp;    //Returns a filter list of LiveData from this.allLiveData base on the given criteria
+<i>62</i>&nbsp;    //Part of a method overload to allow a single EventType filter, or a list of EventType
+<i>63</i>&nbsp;    public List&lt;LiveData&gt; getFilteredEvent(String filter, String s) {
+<i>64</i>&nbsp;
+<b class="fc"><i>65</i>&nbsp;        List&lt;LiveData&gt; events = new ArrayList&lt;&gt;();</b>
+<i>66</i>&nbsp;
+<b class="fc"><i>67</i>&nbsp;        for (LiveData l : this.getAllLiveData()) {</b>
+<b class="fc"><i>68</i>&nbsp;            if (l.filterEvent(filter, s)) {</b>
+<b class="fc"><i>69</i>&nbsp;                events.add(l);</b>
+<i>70</i>&nbsp;            }
+<b class="fc"><i>71</i>&nbsp;        }</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;        return events;</b>
+<i>74</i>&nbsp;
 <i>75</i>&nbsp;
-<b class="nc"><i>76</i>&nbsp;        return events;</b>
+<i>76</i>&nbsp;    }
 <i>77</i>&nbsp;
 <i>78</i>&nbsp;
-<i>79</i>&nbsp;    }
-<i>80</i>&nbsp;}
+<i>79</i>&nbsp;    //REQUIRE: given filter is in the same format as GameData.Team.teamAbr, los is list with  EventType found in
+<i>80</i>&nbsp;    //         LiveData
+<i>81</i>&nbsp;    //MODIFIES: None
+<i>82</i>&nbsp;    //EFFECT: Returns a filter list of LiveData from this.allLiveData base on the given criteria
+<i>83</i>&nbsp;    //Part of a method overload to allow a single EventType filter, or a list of EventType
+<i>84</i>&nbsp;    public List&lt;LiveData&gt; getFilteredEvent(String filter, List&lt;String&gt; los) {
+<i>85</i>&nbsp;
+<b class="fc"><i>86</i>&nbsp;        List&lt;LiveData&gt; events = new ArrayList&lt;&gt;();</b>
+<i>87</i>&nbsp;
+<b class="fc"><i>88</i>&nbsp;        for (LiveData l : this.getAllLiveData()) {</b>
+<b class="fc"><i>89</i>&nbsp;            if (l.filterEvent(filter, los)) {</b>
+<b class="fc"><i>90</i>&nbsp;                events.add(l);</b>
+<i>91</i>&nbsp;            }
+<b class="fc"><i>92</i>&nbsp;        }</b>
+<i>93</i>&nbsp;
+<b class="fc"><i>94</i>&nbsp;        return events;</b>
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    @Override
+<i>100</i>&nbsp;    public JSONObject toJson() {
+<b class="nc"><i>101</i>&nbsp;        JSONObject json = new JSONObject();</b>
+<i>102</i>&nbsp;
+<b class="nc"><i>103</i>&nbsp;        json.put(&quot;gameData&quot;, this.gameData.toJson());</b>
+<b class="nc"><i>104</i>&nbsp;        json.put(&quot;allLiveData&quot;, liveDataToJson());</b>
+<b class="nc"><i>105</i>&nbsp;        json.put(&quot;matchID&quot;, this.matchID);</b>
+<b class="nc"><i>106</i>&nbsp;        json.put(&quot;matchDate&quot;, this.matchDate);</b>
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;
+<b class="nc"><i>109</i>&nbsp;        return json;</b>
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    private JSONArray liveDataToJson() {
+<i>113</i>&nbsp;
+<b class="nc"><i>114</i>&nbsp;        JSONArray array = new JSONArray();</b>
+<i>115</i>&nbsp;
+<b class="nc"><i>116</i>&nbsp;        for (LiveData l: this.allLiveData) {</b>
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;            array.put(l.toJson());</b>
+<i>119</i>&nbsp;
+<b class="nc"><i>120</i>&nbsp;        }</b>
+<i>121</i>&nbsp;
+<b class="nc"><i>122</i>&nbsp;        return array;</b>
+<i>123</i>&nbsp;    }
+<i>124</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2021-02-13 22:43</div>
+    <div style="float:right;">generated on 2021-03-03 11:41</div>
 </div>
 </body>
 </html>

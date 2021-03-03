@@ -1,8 +1,14 @@
 package model;
 
+import exceptions.CanucksNotInImport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import persistence.JsonImport;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +37,11 @@ class MatchTest {
 
     List<String> shotEvents = new ArrayList<>();
 
+    private JsonImport matchImport;
+
+    String JSON_IMPORT = "./imports/";
+    String JSON_STORE = "./data/";
+
     @BeforeEach
     void setup() {
         nucks = new Team("Canucks", "VAN");
@@ -48,7 +59,7 @@ class MatchTest {
         liveData2 = new LiveData("Bo Horvat", "Scorer", "Tanner Pearson",
                 "Assist", "VAN", "Bo Horvat (1) Wrist Shot assists: Tanner Pearson (1)",
                 "Goal", "GOAL", 3,
-                "REGULAR", LocalTime.parse("18:47"), 68, 143);
+                "REGULAR", LocalTime.parse("15:32"), -70, -1);
 
         liveData3 = new LiveData("Colin White", "Shooter", "",
                 "", "OTT", "Colin White Wide of Net",
@@ -73,6 +84,8 @@ class MatchTest {
         shotEvents.add("SHOT");
         shotEvents.add("MISSED_SHOT");
         shotEvents.add("GOAL");
+
+
 
 
     }
@@ -339,4 +352,184 @@ class MatchTest {
 
 
     }
+
+    @Test
+    //testMainEDM contains is the same game as matchData1, but in the offical JSON format from NHL API
+    void testMatchFromJsonImport() {
+
+        //StoredMatchData testStore = new StoredMatchData();
+        MatchData testMatch = null;
+        this.matchImport = new JsonImport(JSON_IMPORT + "testMainEDM.json");
+
+        try {
+            testMatch = matchImport.read();
+        } catch (IOException e) {
+            fail("File should exists");
+        } catch (CanucksNotInImport canucksNotInImport) {
+            fail("Match should contain the Canuck");
+        }
+
+        assertEquals(testMatch.getMatchDate(), matchData1.getMatchDate());
+        assertEquals(testMatch.getMatchID(), matchData1.getMatchID());
+        assertEquals(testMatch.getAllLiveData().size(), matchData1.getAllLiveData().size());
+        //Extract first event from each match
+        LiveData test1A = testMatch.getAllLiveData().get(0);
+        LiveData test1B = matchData1.getAllLiveData().get(0);
+
+        LiveData test2A = testMatch.getAllLiveData().get(1);
+        LiveData test2B = matchData1.getAllLiveData().get(1);
+
+        assertEquals(test1A.getPlayer0(), test1B.getPlayer0());
+        assertEquals(test1A.getCoorX(), test1B.getCoorX());
+        assertEquals(test1A.getCoorY(), test1B.getCoorY());
+
+        assertEquals(test2A.getPlayer0(), test2B.getPlayer0());
+        assertEquals(test2A.getCoorX(), test2B.getCoorX());
+        assertEquals(test2A.getCoorY(), test2B.getCoorY());
+
+
+
+    }
+
+    @Test
+    void testMatchNotCanucksFromImportJson() {
+        MatchData testMatch = null;
+        this.matchImport = new JsonImport(JSON_IMPORT + "NotCanucks.json");
+
+        try {
+            testMatch = matchImport.read();
+            fail("Nope, this match is between LA and MIN (ewwww)");
+
+
+        } catch (IOException e) {
+            fail("File should exists");
+        } catch (CanucksNotInImport canucksNotInImport) {
+            System.out.println("LA vs MIN, so no Canucks! (Process Failed Successfully)");
+
+        }
+
+        assertEquals(testMatch, null);
+
+    }
+
+
+
+    @Test
+    void testInvalidPathFromImportJson() {
+
+        MatchData testMatch = null;
+        this.matchImport = new JsonImport(JSON_IMPORT + "FakeGame.json");
+
+        try {
+            testMatch = matchImport.read();
+            fail("Nope, file does not exists");
+
+        } catch (IOException e) {
+            System.out.println("WRONG, fake game (Process Failed Successfully)");
+
+        } catch (CanucksNotInImport canucksNotInImport) {
+            fail("this file should not exists in the first place!");
+
+        }
+
+        assertEquals(testMatch, null);
+
+    }
+
+    @Test
+    //Should produce 1:1 equal compared to storeMatchData
+    void testSaveLoad1StoredMatch () {
+        storedMatchData.addMatchData(matchData1);
+        StoredMatchData loadedStoredMatches = null;
+        JsonWriter writer = new JsonWriter(JSON_STORE + "test1match.json");
+        JsonReader reader = new JsonReader(JSON_STORE + "test1match.json");
+
+        try {
+            writer.open();
+            writer.write(storedMatchData);
+            writer.close();
+            System.out.println("Saved to " + JSON_STORE);
+
+        } catch (FileNotFoundException e) {
+            fail("Should be able to create this file");
+        }
+
+        try {
+            loadedStoredMatches = reader.read();
+        } catch (IOException e) {
+            fail("file should exist");
+        }
+
+        assertEquals(loadedStoredMatches.getMatchIDs(), storedMatchData.getMatchIDs());
+        assertEquals(loadedStoredMatches.getStoredMatches().size(), storedMatchData.getStoredMatches().size());
+        assertEquals(loadedStoredMatches.getStoredMatches().get(0).getMatchID(),
+                storedMatchData.getStoredMatches().get(0).getMatchID());
+        assertEquals(loadedStoredMatches.getStoredMatches().get(0).getAllLiveData().get(0).getEventType(),
+                storedMatchData.getStoredMatches().get(0).getAllLiveData().get(0).getEventType());
+
+
+
+    }
+
+    @Test
+    void testSaveLoad2StoredMatch () {
+        storedMatchData.addMatchData(matchData1);
+        storedMatchData.addMatchData(matchData2);
+        StoredMatchData loadedStoredMatches = null;
+        JsonWriter writer = new JsonWriter(JSON_STORE + "test1match.json");
+        JsonReader reader = new JsonReader(JSON_STORE + "test1match.json");
+
+        try {
+            writer.open();
+            writer.write(storedMatchData);
+            writer.close();
+            System.out.println("Saved to " + JSON_STORE);
+
+        } catch (FileNotFoundException e) {
+            fail("Should be able to create this file");
+        }
+
+        try {
+            loadedStoredMatches = reader.read();
+        } catch (IOException e) {
+            fail("file should exist");
+        }
+
+        assertEquals(loadedStoredMatches.getMatchIDs(), storedMatchData.getMatchIDs());
+        assertEquals(loadedStoredMatches.getStoredMatches().size(), storedMatchData.getStoredMatches().size());
+
+        //First Game
+        assertEquals(loadedStoredMatches.getStoredMatches().get(0).getMatchID(),
+                storedMatchData.getStoredMatches().get(0).getMatchID());
+        assertEquals(loadedStoredMatches.getStoredMatches().get(0).getAllLiveData().get(0).getEventType(),
+                storedMatchData.getStoredMatches().get(0).getAllLiveData().get(0).getEventType());
+
+        //Second Game
+        assertEquals(loadedStoredMatches.getStoredMatches().get(1).getMatchID(),
+                storedMatchData.getStoredMatches().get(1).getMatchID());
+        assertEquals(loadedStoredMatches.getStoredMatches().get(1).getAllLiveData().get(0).getPlayer0(),
+                storedMatchData.getStoredMatches().get(1).getAllLiveData().get(0).getPlayer0());
+
+    }
+
+    @Test
+    void testLoadDoesNotExitsStoredMatch() {
+
+        StoredMatchData loadedStoredMatches = null;
+        JsonReader reader = new JsonReader(JSON_STORE + "DNE.json");
+
+        try {
+            loadedStoredMatches = reader.read();
+        } catch (IOException e) {
+
+        }
+
+        assertEquals(loadedStoredMatches, null);
+
+
+    }
+
+
+
+
 }

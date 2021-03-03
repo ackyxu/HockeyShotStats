@@ -1,11 +1,14 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.JsonMethods;
+
 import java.time.LocalTime;
 import java.util.List;
 
 
 //Parsed event from the JSON. Represents events that are stored in a call to NHL's Stat API for a match.
-public class LiveData {
+public class LiveData implements JsonMethods {
 
     //player#:name of the player involved in the event
     //player#Type: type of even they were involved in (verb of the person doing the event, and being acted on)
@@ -40,8 +43,8 @@ public class LiveData {
     //REQUIRE: coorX [-42.5, 42.5] coorY [-100,100]
     //EFFECT: Construct a LiveData
     public LiveData(String player0, String player0Type, String player1, String player1Type, String team,
-                    String detail, String event, String eventType, int period, String periodType, LocalTime periodTime,
-                    int coorX, int coorY) {
+                    String detail, String event, String eventType, Integer period, String periodType,
+                    LocalTime periodTime, Integer coorX, Integer coorY) {
 
         this.player0 = player0;
         this.player0Type = player0Type;
@@ -123,5 +126,27 @@ public class LiveData {
     public boolean filterEvent(String filter, List<String> los) {
 
         return team.equals(filter) && los.contains(eventType);
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+
+        json.put("player0", this.player0);
+        json.put("player0Type", this.player0Type);
+        json.put("player1", this.player1);
+        json.put("player1Type", this.player1Type);
+        json.put("team", this.team);
+        json.put("detail", this.detail);
+        json.put("event", this.event);
+        json.put("eventType", this.eventType);
+        json.put("period", this.period);
+        json.put("periodType", this.periodType);
+        json.put("periodTime", this.periodTime);
+        json.put("coorX", this.coorX);
+        json.put("coorY", this.coorY);
+
+
+        return json;
     }
 }
