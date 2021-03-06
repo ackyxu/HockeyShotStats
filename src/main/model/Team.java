@@ -27,6 +27,7 @@ public class Team implements JsonMethods {
     }
 
     @Override
+    //Refer to JsonMethods
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
 

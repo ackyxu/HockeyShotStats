@@ -1,6 +1,3 @@
-
-
-
 package model;
 
 
@@ -13,12 +10,12 @@ import java.util.List;
 
 //Object for the JSON to parse to
 public class MatchData implements JsonMethods {
-    private GameData gameData;
-    private List<LiveData> allLiveData;
+    private final GameData gameData;
+    private final List<LiveData> allLiveData;
     //The offical ID for the match, per NHL API
-    private Integer matchID;
+    private final Integer matchID;
     //For filtering games withing certain date
-    private String matchDate;
+    private final String matchDate;
 
     //REQUIRES: None
     //EFFECT: Construct a MatchData
@@ -53,7 +50,6 @@ public class MatchData implements JsonMethods {
     public boolean compareMatchID(Integer i) {
         return this.getMatchID().equals(i);
     }
-
 
 
     //REQUIRE: given filter is in the same format as GameData.Team.teamAbr, s is an EventType found in LiveData
@@ -97,6 +93,7 @@ public class MatchData implements JsonMethods {
     }
 
     @Override
+    //Refer to JsonMethods
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
 
@@ -109,11 +106,13 @@ public class MatchData implements JsonMethods {
         return json;
     }
 
+    //MODIFIES: none
+    //EFFECTS: Convert a LiveData to a JSONArray
     private JSONArray liveDataToJson() {
 
         JSONArray array = new JSONArray();
 
-        for (LiveData l: this.allLiveData) {
+        for (LiveData l : this.allLiveData) {
 
             array.put(l.toJson());
 

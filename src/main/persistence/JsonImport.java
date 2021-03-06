@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 //derived from JsonSerializationDemo
-//Imports the match data from NHL API's JSON returns
+//Imports the match data from NHL API's JSON
 public class JsonImport extends JsonReaders {
 
     private String source;
@@ -53,6 +53,8 @@ public class JsonImport extends JsonReaders {
         return contentBuilder.toString();
     }
 
+
+    //EFFECTS: convert a NHL API JSON file a MatchData
     private MatchData parseMatchData(JSONObject jsonObject) throws CanucksNotInImport {
 
 
@@ -66,6 +68,7 @@ public class JsonImport extends JsonReaders {
         return new MatchData(gameData, listLiveData, matchID, matchDate);
     }
 
+    //EFFECTS: convert a JSONArray from NHL API JSON  to List<LiveData>
     private List<LiveData> parseLiveDataList(JSONObject jsonObject) {
 
         List<LiveData> liveDataList = new ArrayList<>();
@@ -85,6 +88,7 @@ public class JsonImport extends JsonReaders {
         return liveDataList;
     }
 
+    //EFFECTS: convert a JSONObject from NHL API JSON to LiveData
     private LiveData parseLiveData(JSONObject nextLiveData) {
 
         JSONObject result = getObject(nextLiveData,"result");
@@ -110,6 +114,7 @@ public class JsonImport extends JsonReaders {
                 eventType,  period, periodType,  periodTime,  coorX,  coorY);
     }
 
+    //EFFECTS: convert a JSONObject from NHL API JSON to a GameData
     private GameData parseGameData(JSONObject jsonObject) throws CanucksNotInImport {
 
         JSONObject gameDataObject = jsonObject.getJSONObject("gameData").getJSONObject("teams");
@@ -129,6 +134,7 @@ public class JsonImport extends JsonReaders {
 
     }
 
+    //EFFECTS: convert a JSONObject from NHL API JSON to a Team
     private Team parseTeam(JSONObject jsonObject, String status) {
 
         JSONObject teamObject = getObject(jsonObject,status);
@@ -144,7 +150,11 @@ public class JsonImport extends JsonReaders {
 
     }
 
-
+    //REQUIRE: The given JSONObject contains keys of "players" and/or "playerType", or none of those two.
+    //EFFECT: The method either:
+    //        If JSONException is caught (Object does not exists), return empty string
+    //        If object == "player", retrieve player data 0 or 1, depending on index
+    //        Else, return a parsed "playerType" string from the JSONObject
     private String getPlayerLiveData(JSONObject jsonObject, int index, String object) {
         JSONObject json;
         try {

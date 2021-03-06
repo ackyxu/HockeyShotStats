@@ -26,6 +26,8 @@ public class ConsoleInterface {
     private String team;
     private JsonImport matchImport;
 
+
+    //EFFECTS: Stats the Console Interface
     public ConsoleInterface() {
 
         String option;
@@ -60,6 +62,9 @@ public class ConsoleInterface {
         loadOptions();
     }
 
+    //MODIFIES: this
+    //EFFECTS: Loads the matches stored from the previous section, if any.  Allows user to select which instance they
+    //         wish to load in.
     private void loadStoredMatches() {
         System.out.println("Enter the file name you wish to load");
         String option = this.input.next();
@@ -75,6 +80,8 @@ public class ConsoleInterface {
 
     }
 
+    //MODIFIES: this
+    //EFFECTS: Displays the menus option for Loading Stored Matches
     private void loadOptions() {
 
         Boolean keepGoing = true;
@@ -153,7 +160,7 @@ public class ConsoleInterface {
         System.out.println("1: Import Match");
         System.out.println("2: Drop Match");
         System.out.println("3: Return to Main Menu");
-        System.out.println("4: Test");
+        System.out.println("4: Import From Text File (Deprecated)");
 
 
     }
@@ -165,8 +172,8 @@ public class ConsoleInterface {
         String option = this.input.next();
 
         if (option.equals("1")) {
+            processImportMatch();
 
-            processMatch();
 
         } else if (option.equals("2")) {
 
@@ -178,7 +185,7 @@ public class ConsoleInterface {
 
         } else if (option.equals("4")) {
 
-            processTest();
+            processMatch();
 
         } else {
             System.out.println("Unrecognized Input");
@@ -263,6 +270,9 @@ public class ConsoleInterface {
 
     }
 
+
+    //MODIFIES: This
+    //EFFECTS: Display and process the option the users elects in the Exit Menu
     private void processExitOptions() {
 
         Boolean keepGoing = true;
@@ -292,6 +302,9 @@ public class ConsoleInterface {
 
     }
 
+
+    //MODIFIES: none
+    //EFFECTS: Displays the menus option for the Exit Menu
     private void displayExitMenu() {
         System.out.println("Do you wish to save the Stored Matches? (y/n)");
     }
@@ -419,9 +432,11 @@ public class ConsoleInterface {
 
     }
 
-    private void processTest() {
+    //MODIFIES: this
+    //EFFECTS: Process importing a NHL matches retrieved from API (currently, only local cache files in JSON)
+    private void processImportMatch() {
         System.out.println("Enter the name of the game you wish to import");
-        String file = JSON_IMPORT + input.next();
+        String file = JSON_IMPORT + input.next() + ".json";
         matchImport = new JsonImport(file);
 
         try {
@@ -433,11 +448,11 @@ public class ConsoleInterface {
             System.out.println("Oops! Looks like the Canucks did not play in that game!");
         }
 
-        System.out.println("Great Success!");
+        System.out.println("\nGreat Success!\n");
     }
 
 
-        //MODIFIES: this.storedMatchData
+    //MODIFIES: this.storedMatchData
     //EFFECT: Drops Selected Match
     private void dropMatch() {
         MatchData match = null;

@@ -25,14 +25,6 @@ public class StoredMatchData implements JsonMethods {
         this.matchIDs = matchIDs;
     }
 
-    //TODO Maybe delete
-//    //REQUIRE: None
-//    //EFFECT: Construct a new StoredMatchData from persistence file
-//    public StoredMatchData(List<MatchData> storedMatches, List<Integer> matchIDs) {
-//
-//        this.storedMatches = storedMatches;
-//        this.matchIDs = matchIDs;
-//    }
 
     public List<MatchData> getStoredMatches() {
         return storedMatches;
@@ -86,6 +78,7 @@ public class StoredMatchData implements JsonMethods {
 
 
     @Override
+    //Refer to JsonMethods
     public JSONObject toJson() {
 
         JSONObject json = new JSONObject();
@@ -97,6 +90,7 @@ public class StoredMatchData implements JsonMethods {
 
     }
 
+    //EFFECT: Converts a List<MatchData> to a JSONArray
     private JSONArray matchDataToJson() {
         JSONArray storedMatchesJson = new JSONArray();
 
@@ -110,6 +104,7 @@ public class StoredMatchData implements JsonMethods {
 
     }
 
+    //EFFECT: Converts a the field matchIDs to a JSONArray
     private JSONArray matchIdToJson() {
         JSONArray storedIdJson = new JSONArray();
 

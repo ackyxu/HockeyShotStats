@@ -13,11 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+//Imports in a previous session from a JSON file
 public class JsonReader extends JsonReaders {
 
     private String source;
 
-    //EFFECTS: create imported to read from the given source file
+
     public JsonReader(String source) {
 
         this.source = source;
@@ -46,6 +47,7 @@ public class JsonReader extends JsonReaders {
         return contentBuilder.toString();
     }
 
+    //EFFECTS: convert a NHL API JSON file to a StoredMatchData
     private StoredMatchData parseStoredMatchData(JSONObject json) {
         StoredMatchData storedMatchData = new StoredMatchData();
 
@@ -63,40 +65,8 @@ public class JsonReader extends JsonReaders {
         return storedMatchData;
 
     }
-// TODO maybe delete?
-//
-//    private StoredMatchData parseListMatchData(JSONObject json) {
-//        StoredMatchData storedMatchData = new StoredMatchData();
-//
-//        JSONArray storeMatchesArray = json.getJSONArray("storedMatches");
-//
-//        for (Object match: storeMatchesArray) {
-//
-//            JSONObject nextMatch = (JSONObject) match;
-//
-//            storedMatchData.addMatchData(parseMatchData(nextMatch));
-//
-//
-//        }
-//
-//        return storedMatchData;
-//    }
-//
-//    private List<Integer> parseMatchIDs(JSONObject json) {
-//        List<Integer> storedID =  new ArrayList<>();
-//
-//        JSONArray storeIdArray = json.getJSONArray("storedId");
-//
-//        for (int i = 0; i < storeIdArray.length(); i++) {
-//
-//            storedID.add(storeIdArray.getInt(i));
-//
-//
-//        }
-//
-//        return storedID;
-//    }
 
+    //EFFECTS: convert a NHL API JSON file a MatchData
     private MatchData parseMatchData(JSONObject jsonObject) {
 
 
@@ -109,6 +79,7 @@ public class JsonReader extends JsonReaders {
         return new MatchData(gameData, listLiveData, matchID, matchDate);
     }
 
+    //EFFECTS: convert a JSONArray from NHL API JSON  to List<LiveData>
     private List<LiveData> parseLiveDataList(JSONObject jsonObject) {
 
         List<LiveData> liveDataList = new ArrayList<>();
@@ -126,6 +97,7 @@ public class JsonReader extends JsonReaders {
         return liveDataList;
     }
 
+    //EFFECTS: convert a JSONObject from NHL API JSON to LiveData
     private LiveData parseLiveData(JSONObject nextLiveData) {
 
         String player0 = parseString(nextLiveData, "player0");
@@ -147,6 +119,7 @@ public class JsonReader extends JsonReaders {
                 eventType,  period, periodType,  periodTime,  coorX,  coorY);
     }
 
+    //EFFECTS: convert a JSONObject from NHL API JSON to a GameData
     private GameData parseGameData(JSONObject jsonObject)  {
 
         JSONObject gameDataObject = jsonObject.getJSONObject("gameData");
@@ -163,6 +136,7 @@ public class JsonReader extends JsonReaders {
 
     }
 
+    //EFFECTS: convert a JSONObject from NHL API JSON to a Team
     private Team parseTeam(JSONObject jsonObject, String status) {
 
         JSONObject teamObject = getObject(jsonObject,status);
@@ -172,13 +146,7 @@ public class JsonReader extends JsonReaders {
 
         return new Team(name, abr);
 
-
-
-
-
     }
-
-
 
 
 }
