@@ -276,19 +276,37 @@ class MatchTest {
         MatchData matchDataWithBlockedShot =
                 new MatchData(gameData2, liveDataList2, 2020020117, "2021-01-29");
 
+        List<String> shotEventsNoBlock = new ArrayList<>();
+
+        shotEventsNoBlock.add("SHOT");
+        shotEventsNoBlock.add("MISSED_SHOT");
+        shotEventsNoBlock.add("GOAL");
 
         List<LiveData> filter2 = matchDataWithBlockedShot.getFilteredEvent("VAN", shotEvents);
         List<LiveData> filter3 = matchDataWithBlockedShot.getFilteredEvent("OTT", shotEvents);
+        List<LiveData> filter4 = matchDataWithBlockedShot.getFilteredEvent("VAN", shotEventsNoBlock);
+        List<LiveData> filter5 = matchDataWithBlockedShot.getFilteredEvent("OTT", shotEventsNoBlock);
 
         assertTrue(liveDataWithBlockedShot.filterEvent("VAN", "BLOCKED_SHOT"));
+        assertFalse(liveDataWithBlockedShot.filterEvent("VAN", "GOAL"));
         assertFalse(liveDataWithBlockedShot.filterEvent("OTT", "BLOCKED_SHOT"));
+        assertFalse(liveDataWithBlockedShot.filterEvent("OTT", "GOAL"));
 
 
-        assertFalse(filter2.contains(liveData3));
+
+
         assertEquals(1, filter2.size());
 
-        assertTrue(filter3.contains(liveData3));
+
         assertEquals(1, filter3.size());
+
+
+        assertEquals(filter4.size(), 0);
+
+
+        assertEquals(filter5.size(), 1);
+
+
 
 
     }
