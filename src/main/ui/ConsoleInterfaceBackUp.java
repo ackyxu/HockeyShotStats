@@ -1,6 +1,9 @@
 package ui;
 
+import exceptions.CanucksNotInImport;
 import model.*;
+import persistence.JsonImport;
+import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import java.io.BufferedReader;
@@ -14,19 +17,22 @@ import java.util.List;
 import java.util.Scanner;
 
 
-public class ConsoleInterface extends Interface {
-
+public class ConsoleInterfaceBackUp {
+    protected static final String JSON_STORE = "./data/";
+    protected static final String JSON_IMPORT = "./data/imports/";
+    protected StoredMatchData storedMatchData;
+    protected List<String> shotEvents;
     private Scanner input;
-
+    protected String team;
+    protected JsonImport matchImport;
 
 
     //EFFECTS: Stats the Console Interface
-    public ConsoleInterface() {
+    public ConsoleInterfaceBackUp() {
 
-
-
-        super();
+        String option;
         boolean keepgoing = true;
+        init();
         while (keepgoing) {
 
             displayMenu();
@@ -41,18 +47,38 @@ public class ConsoleInterface extends Interface {
 
     // MODIFIES: this
     // EFFECTS: initializes fields
-    protected void init() {
-
-        super.init();
+    private void init() {
         this.input = new Scanner(System.in);
+        storedMatchData = new StoredMatchData();
 
+        team = "VAN";
 
-
+        this.shotEvents = new ArrayList<>();
+        this.shotEvents.add("BLOCKED_SHOT");
+        this.shotEvents.add("SHOT");
+        this.shotEvents.add("MISSED_SHOT");
+        this.shotEvents.add("GOAL");
 
         loadOptions();
     }
 
+    //MODIFIES: this
+    //EFFECTS: Loads the matches stored from the previous section, if any.  Allows user to select which instance they
+    //         wish to load in.
+    private void loadStoredMatches() {
+        System.out.println("Enter the file name you wish to load");
+        String option = this.input.next();
 
+        JsonReader reader = new JsonReader(JSON_STORE + option + ".json");
+
+        try {
+            this.storedMatchData = reader.read();
+            System.out.println("Loaded from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+
+    }
 
     //MODIFIES: this
     //EFFECTS: Displays the menus option for Loading Stored Matches
@@ -63,19 +89,11 @@ public class ConsoleInterface extends Interface {
         while (keepGoing) {
 
             System.out.println("Do you wish to load an saved Matches file? (y/n)");
-            option = this.input.next();
+            String option = this.input.next();
 
             if (option.equals("y")) {
 
-                System.out.println("Enter the file name you wish to load");
-                option = this.input.next();
-
-
-                try {
-                    loadStoredMatches(option + ".json");
-                } catch (IOException e) {
-                    System.out.println("Unable to read from file: " + JSON_STORE);
-                }
+                loadStoredMatches();
 
                 keepGoing = false;
 
@@ -95,7 +113,7 @@ public class ConsoleInterface extends Interface {
     //MODIFIES: None
     //EFFECT: Process the options selected from displayMenu() in Console Interface
     //NOTE: Make sure to update displayMenu() when adding new options
-    protected boolean processMainOptions(String option) {
+    boolean processMainOptions(String option) {
         boolean keepgoing = true;
         if (option.equals("1")) {
 
@@ -126,7 +144,7 @@ public class ConsoleInterface extends Interface {
     //MODIFIES: None
     //EFFECT: Display Main Menu Options
     //NOTE: Make sure to update processMainOptions() when adding new options
-    protected void displayMenu() {
+    void displayMenu() {
         menuQuestion();
         System.out.println("1: Import/Drop Match");
         System.out.println("2: Open Events Menu");
@@ -137,7 +155,7 @@ public class ConsoleInterface extends Interface {
 
     //MODIFIES: None
     //Effect: Print out menu options for Importing and Dropping Matches
-    protected void displayStoreMatchMenu() {
+    private void displayStoreMatchMenu() {
         menuQuestion();
         System.out.println("1: Import Match");
         System.out.println("2: Drop Match");
@@ -149,14 +167,12 @@ public class ConsoleInterface extends Interface {
 
     //MODIFIES: None
     //EFFECT: Open and process the user's input for Importing and Dropping Matches menu options
-    protected void processStoredMatchOptions() {
+    private void processStoredMatchOptions() {
         displayStoreMatchMenu();
         String  option = this.input.next();
 
         if (option.equals("1")) {
-            System.out.println("Enter the name of the game you wish to import");
-            String file = JSON_IMPORT + input.next() + ".json";
-            processImportMatch(file);
+            processImportMatch();
 
 
         } else if (option.equals("2")) {
@@ -178,19 +194,11 @@ public class ConsoleInterface extends Interface {
 
     }
 
-    @Override
-    protected void loadStoredMatches(String option) throws IOException {
-
-        super.loadStoredMatches(option);
-        System.out.println("Loaded from " + JSON_STORE);
-
-    }
-
 
     //MODIFIES: none
     //EFFECT: Opens and process the submenu for events related options
 
-    protected void processEventOptions() {
+    private void processEventOptions() {
 
         displayEventMenu();
         String option = this.input.next();
@@ -217,7 +225,7 @@ public class ConsoleInterface extends Interface {
     //MODIFIES: None
     //EFFECT: Display Event Menu Options
     //NOTE: Make sure to update processMainOptions() when adding new options
-    protected void displayEventMenu() {
+    private void displayEventMenu() {
         menuQuestion();
         System.out.println("1: Return Goals Scored");
         System.out.println("2: Return Shot Events");
@@ -228,7 +236,7 @@ public class ConsoleInterface extends Interface {
     //MODIFIES: None
     //EFFECT: Display Summary Menu Options
     //NOTE: Make sure to update processMainOptions() when adding new options
-    protected void displaySummaryMenu() {
+    private void displaySummaryMenu() {
         menuQuestion();
         System.out.println("1: List All Matches Imported");
         System.out.println("2: Summary of Imported Matches");
@@ -238,7 +246,7 @@ public class ConsoleInterface extends Interface {
 
     //MODIFIES: None
     //EFFECT: display and process menu options for Match Summaries
-    protected void processSummaryOptions() {
+    private void processSummaryOptions() {
 
         displaySummaryMenu();
         String option = this.input.next();
@@ -265,7 +273,7 @@ public class ConsoleInterface extends Interface {
 
     //MODIFIES: This
     //EFFECTS: Display and process the option the users elects in the Exit Menu
-    protected void processExitOptions() {
+    private void processExitOptions() {
 
         Boolean keepGoing = true;
 
@@ -291,38 +299,6 @@ public class ConsoleInterface extends Interface {
             }
 
         }
-
-    }
-
-    //MODIFIES: this.storedMatchData
-    //EFFECT: Drops Selected Match
-    protected void dropMatch() {
-        MatchData match = null;
-        if (this.storedMatchData.storedSize() == 0) {
-            System.out.println("Error: Currently not Matches are imported");
-        } else {
-            System.out.println("Enter the ID of the Match you wish to drop");
-            Integer id = Integer.parseInt(input.next());
-
-            if (!this.storedMatchData.checkContainMatchID(id)) {
-                System.out.println("The Match was not imported/ID was entered incorrectly");
-            }
-
-            for (MatchData m : this.storedMatchData.getStoredMatches()) {
-
-
-                if (m.getMatchID().equals(id)) {
-                    System.out.println("Match dropped " + m.getMatchDate() + " ID: " + m.getMatchID());
-                    System.out.println("\n");
-                    match = m;
-
-
-                }
-            }
-        }
-
-
-        this.storedMatchData.dropMatchData(match);
 
     }
 
@@ -456,14 +432,64 @@ public class ConsoleInterface extends Interface {
 
     }
 
+    //MODIFIES: this
+    //EFFECTS: Process importing a NHL matches retrieved from API (currently, only local cache files in JSON)
+    private void processImportMatch() {
+        System.out.println("Enter the name of the game you wish to import");
+        String file = JSON_IMPORT + input.next() + ".json";
+        matchImport = new JsonImport(file);
 
+        try {
+            this.storedMatchData.addMatchData(matchImport.read());
+
+        } catch (IOException e) {
+            System.out.println("Error: File not found \n please check the name of the file you fish to import");
+        } catch (CanucksNotInImport canucksNotInImport) {
+            System.out.println("Oops! Looks like the Canucks did not play in that game!");
+        }
+
+        System.out.println("\nGreat Success!\n");
+    }
+
+
+    //MODIFIES: this.storedMatchData
+    //EFFECT: Drops Selected Match
+    private void dropMatch() {
+        MatchData match = null;
+        if (this.storedMatchData.storedSize() == 0) {
+            System.out.println("Error: Currently not Matches are imported");
+        } else {
+            System.out.println("Enter the ID of the Match you wish to drop");
+            Integer id = Integer.parseInt(input.next());
+
+            if (!this.storedMatchData.checkContainMatchID(id)) {
+                System.out.println("The Match was not imported/ID was entered incorrectly");
+            }
+
+            for (MatchData m : this.storedMatchData.getStoredMatches()) {
+
+
+                if (m.getMatchID().equals(id)) {
+                    System.out.println("Match dropped " + m.getMatchDate() + " ID: " + m.getMatchID());
+                    System.out.println("\n");
+                    match = m;
+
+
+                }
+            }
+        }
+
+
+        this.storedMatchData.dropMatchData(match);
+
+    }
 
 
     //REQUIRES: input is an eventType or list of eventType, which are criteria for filtering LiveData
     //MODIFIES: None
     //EFFECT: process and prints out events, fitlered by the given input EventType/EventTypes with options to select
     //        all MatchData in StoreMatchData, or user selected MatchData
-    protected void processEvents(Object o) {
+    private void processEvents(Object o) {
         List<String> events = new ArrayList<>();
         if (this.storedMatchData.storedSize() == 0) {
             System.out.println("No matches are currently imported");
@@ -488,7 +514,7 @@ public class ConsoleInterface extends Interface {
     //EFFECT: Retrieved filtered event base on the give EventType S from give MatchData, then return the events as
     //        processed Strings
     //Part of a Method Overload, to allowed a single EventType, or list of EventTypes
-    protected List<String> retrieveEvents(MatchData match, String s) {
+    private List<String> retrieveEvents(MatchData match, String s) {
 
 
         List<LiveData> liveDatas = match.getFilteredEvent(this.team, s);
@@ -510,7 +536,7 @@ public class ConsoleInterface extends Interface {
     //EFFECT: Retrieved filtered event base on the give EventTypes los from give MatchData, then return the events as
     //        processed Strings
     //Part of a Method Overload, to allowed a single EventType, or list of EventTypes
-    protected List<String> retrieveEvents(MatchData match, List<String> los) {
+    private List<String> retrieveEvents(MatchData match, List<String> los) {
 
 
         List<LiveData> liveDatas = match.getFilteredEvent(this.team, los);
@@ -532,12 +558,25 @@ public class ConsoleInterface extends Interface {
     }
 
 
+    //MODIFIES: None
+    //EFFECT: convert a LiveData into an String that will be printed onto the console
+    private String retrieveEvent(LiveData l) {
 
+        String coor = "x: " + l.getCoorX() + " , y: " + l.getCoorY();
+        String line1 = l.getPeriod() + " " + l.getPeriodType() + " " + l.getPeriodTime() + "\n";
+        String line2 = l.getPlayer0() + " " + l.getPlayer0Type() + " | " + l.getPlayer1() + " " + l.getPlayer1Type()
+                + "\n";
+        String line3 = l.getEvent() + " " + l.getEventType() + " " + l.getTeam() + "\n";
+
+        String line4 = l.getDetail() + " " + l.getPlayer0() + " @ " + "(" + coor + ") ";
+        return line1 + line2 + line3 + line4 + "\n";
+
+    }
 
 
     //MODIFIES: None
     //EFFECT: Prints out a list of Strings that represents an event
-    protected void printEvents(List<String> ls) {
+    private void printEvents(List<String> ls) {
         for (String s : ls) {
             System.out.print(s + "\n");
         }
@@ -546,7 +585,7 @@ public class ConsoleInterface extends Interface {
     //REQUIRES: this.storedMatchData != null
     //MODIFIES: None
     //EFFECT: Retrieve either all matches in storedMatchData or select matches form storedMatchData
-    protected List<MatchData> matchOptionSelector() {
+    private List<MatchData> matchOptionSelector() {
         boolean exit = true;
         List<MatchData> matchList = new ArrayList<>();
 
@@ -575,7 +614,7 @@ public class ConsoleInterface extends Interface {
     //MODIFIES: None
     //EFFECT: Retrieve select Matches base on matchID
 
-    protected List<MatchData> retrieveSelectedMatches() {
+    private List<MatchData> retrieveSelectedMatches() {
         List<MatchData> matches = new ArrayList<>();
         boolean exit = true;
 
@@ -621,7 +660,7 @@ public class ConsoleInterface extends Interface {
     //REQUIRE: this.storedMatchData != null
     //MODIFIES: None
     //EFFECT: Prints out the IDs of all the matches in storedMatchData
-    protected void printStoreMatchID() {
+    private void printStoreMatchID() {
         System.out.print("\n");
         for (Integer i : this.storedMatchData.getMatchIDs()) {
             System.out.print(i + "\n");
@@ -629,28 +668,68 @@ public class ConsoleInterface extends Interface {
         System.out.print("\n");
     }
 
+    //REQUIRE: i must be in this.storedMatchIDs
+    //MODIFIES: None
+    //EFFECT: retrieve matches with the same matchID as the given integer
+    private MatchData retrieveMatchByID(Integer i) {
 
+        MatchData match = null;
+
+        for (MatchData m : this.storedMatchData.getStoredMatches()) {
+            if (m.compareMatchID(i)) {
+                match = m;
+                break;
+
+            }
+
+        }
+
+        return match;
+    }
 
     //REQUIRE: s is a String that contains only numerical Digits\
     //MODIFIES: None
     //EFFECT: Parse a string into Integer that represents a MatchData.MatchID
-    protected Integer parseStringToID(String s) {
+    private Integer parseStringToID(String s) {
         Integer i = 0;
         try {
             i = Integer.parseInt(s);
+
         } catch (NumberFormatException e) {
             System.out.print("Please check the format of the IDs you entered\n");
+
         }
 
         return i;
-
     }
 
+    //REQUIRE: storedMatchData.size() != 0
+    //MODIFIES: None
+    //EFFECT: Prints out a Summary of all the imported Matches
+    private void processMatchSummary() {
+        for (MatchData m : this.storedMatchData.getStoredMatches()) {
+            List<Integer> counts = countShotEvents(m);
+            Integer block = counts.get(0);
+            Integer shots = counts.get(1);
+            Integer missed = counts.get(2);
+            Integer goal = counts.get(3);
 
+            System.out.println("\nHome Team: " + m.getGameData().getHome().getTeamName() + " "
+                    + m.getGameData().getHome().getTeamAbr());
+            System.out.println("Away Team: " + m.getGameData().getAway().getTeamName() + " "
+                    + m.getGameData().getAway().getTeamAbr());
+            System.out.println(" ");
+            System.out.println("Date: " + m.getMatchDate() + " ID: " + m.getMatchID());
+            System.out.println("Cancuks:");
+            System.out.println("Blocked Shots:" + block + "  Shots On Net:" + shots + "  Missed Shots:" + missed);
+            System.out.println("Goals: " + goal + "\n");
+
+        }
+    }
 
     //MODIFIES: None
     //EFFECT: Count the number of event that matches the ones defined in shotEvents.
-    protected List<Integer> countShotEvents(MatchData m) {
+    private List<Integer> countShotEvents(MatchData m) {
         List<Integer> counts = new ArrayList<>();
         for (String s : this.shotEvents) {
             Integer i = retrieveEvents(m, s).size();
@@ -669,7 +748,7 @@ public class ConsoleInterface extends Interface {
         System.out.println("Please Enter the Number of the Option:");
     }
 
-    protected void saveStoreMatches() {
+    private void saveStoreMatches() {
 
         System.out.println("Please enter the name you wish to save the file as:");
         String file = input.next();
