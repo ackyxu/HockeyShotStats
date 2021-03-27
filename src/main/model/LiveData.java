@@ -120,7 +120,7 @@ public class LiveData implements JsonMethods {
     // the team blocking the shot, not the team shooting the shot.
     public boolean filterEvent(String filter, String event) {
 
-        if (eventType.equals("BLOCKED_SHOT") && !team.equals(filter)) {
+        if (eventType.equals("BLOCKED_SHOT") && !team.equals(filter) && event.equals("BLOCKED_SHOT")) {
 
             return true;
 
@@ -135,7 +135,7 @@ public class LiveData implements JsonMethods {
     //EFFECT: one part of a method overloading; returns true if EventType is in los
     public boolean filterEvent(String filter, List<String> los) {
 
-        if (eventType.equals("BLOCKED_SHOT") && !team.equals(filter)) {
+        if (eventType.equals("BLOCKED_SHOT") && !team.equals(filter) && los.contains("BLOCKED_SHOT")) {
 
             return  true;
 
