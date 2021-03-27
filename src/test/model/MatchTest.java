@@ -262,6 +262,39 @@ class MatchTest {
 
     }
 
+    @Test
+    void testGetFilteredListEventWithBlockedShot() {
+
+        LiveData liveDataWithBlockedShot = new LiveData("Colin White", "Shooter", "",
+                "", "OTT", "Colin White Wide of Net",
+                "Blocked Shot", "BLOCKED_SHOT", 2,
+                "REGULAR", LocalTime.parse("01:20"), -44, 26);
+
+
+        liveDataList2.add(liveDataWithBlockedShot);
+
+        MatchData matchDataWithBlockedShot =
+                new MatchData(gameData2, liveDataList2, 2020020117, "2021-01-29");
+
+
+        List<LiveData> filter2 = matchDataWithBlockedShot.getFilteredEvent("VAN", shotEvents);
+        List<LiveData> filter3 = matchDataWithBlockedShot.getFilteredEvent("OTT", shotEvents);
+
+        assertTrue(liveDataWithBlockedShot.filterEvent("VAN", "BLOCKED_SHOT"));
+        assertFalse(liveDataWithBlockedShot.filterEvent("OTT", "BLOCKED_SHOT"));
+
+
+        assertFalse(filter2.contains(liveData3));
+        assertEquals(1, filter2.size());
+
+        assertTrue(filter3.contains(liveData3));
+        assertEquals(1, filter3.size());
+
+
+    }
+
+
+
 
     @Test
     void testAddMatch1() {
