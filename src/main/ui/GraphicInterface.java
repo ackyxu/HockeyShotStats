@@ -60,7 +60,8 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     }
 
-
+    //Modifies: This
+    //Effect: Initialize JFrame and the associated panels
     protected void init() {
 
         super.init();
@@ -88,20 +89,6 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
     }
 
     /***UI Methods***/
-
-    public void initTopPanel() {
-
-
-        displayMenu();
-
-
-    }
-
-
-    public void setEventText(String str) {
-        textArea.append("\n" + str);
-
-    }
 
     //MODIFIES: this
     //EFFECT: Pops up a dialog box that lets users choose to import a previous instance or not.
@@ -151,12 +138,14 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     private void initOptionPanel() {
 
-        initTopPanel();
+        displayMenu();
         frame.add(optionPanel);
         refreshOptionPanel();
 
     }
 
+    //Modifies: This
+    //Effect: Refresh and validates the JFrame with it's JPanels
     private void refreshOptionPanel() {
         frame.remove(optionPanel);
         optionPanel.setLayout(new GridLayout(2, 1));
@@ -202,6 +191,10 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     }
 
+
+    //Require: a string that is a directory path
+    //Modifies: this
+    //Effect: Creates an interactive JFileChooser for selected file to load or save (new imports and instances)
     private void createLoadSaveJsonWindow(String directory) {
 
         JFileChooser jfc = new JFileChooser(directory);
@@ -217,16 +210,10 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     }
 
-//    @Override
-//    protected void loadStoredMatches(String option) throws IOException {
-//
-//        super.loadStoredMatches(option);
-//        textArea.append("Loaded from " + JSON_STORE);
-//
-//    }
-
 
     @Override
+    //Refer to Interface Class for Spec
+    //Effect: (modified from Interface) creates a JPanel for main menu options
     protected void displayMenu() {
 
         List<String> optionList = new ArrayList<>();
@@ -246,6 +233,8 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
     }
 
     @Override
+    //Refer to Interface Class for Spec
+    //Effect: (modified from Interface) creates a JPanel for summary options
     protected void displaySummaryMenu() {
 
         List<String> optionList = new ArrayList<>();
@@ -264,7 +253,8 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
     }
 
     @Override
-    //refer to Interface for sepcs
+    //Refer to Interface Class for Spec
+    //Effect: (modified from Interface) creates a JPanel for event options
     protected void displayEventMenu() {
 
         List<String> optionList = new ArrayList<>();
@@ -332,7 +322,8 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     }
 
-
+    //Refer to Interface Class for Spec
+    //Effect: (modified from Interface) creates a JPanel for match selection option for event selections
     protected void displayMatchSelectorOption() {
         List<String> optionList = new ArrayList<>();
         optionList.add("All Games To Date");
@@ -347,7 +338,8 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     }
 
-
+    //Modifies: none
+    //Effect: displays the exit options when user is closeing the main JFrame (either by Exit button or X button)
     protected void processExitOptions() {
 
         int option = JOptionPane.showConfirmDialog(null,
@@ -362,11 +354,8 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
     }
 
 
-    protected void processEvents(Object o) {
-
-    }
-
     @Override
+    //refer to Inferace for Spec
     protected List<MatchData> retrieveSelectedMatches() {
 
         List<MatchData> matches = new ArrayList<>();
@@ -386,6 +375,7 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
     }
 
     @Override
+    //refer to Inferace for Spec
     protected List<String> retrieveEvents(MatchData match, String s) {
         List<LiveData> liveDatas = match.getFilteredEvent(this.team, s);
         List<String> events = new ArrayList<>();
@@ -403,6 +393,7 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
 
     @Override
+    //refer to Inferace for Spec
     protected List<String> retrieveEvents(MatchData match, List<String> los) {
 
         List<LiveData> liveDatas = match.getFilteredEvent(this.team, los);
@@ -424,18 +415,10 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
     }
 
 
-    @Override
-    protected void printEvents(List<String> ls) {
-
-    }
 
 
     @Override
-    protected Integer parseStringToID(String s) {
-        return null;
-    }
-
-    @Override
+    //refer to Inferace for Spec
     protected void saveStoreMatches() {
 
         createLoadSaveJsonWindow(JSON_STORE);
@@ -448,10 +431,10 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
             writer.open();
             writer.write(this.storedMatchData);
             writer.close();
-            System.out.println("Saved to " + JSON_STORE);
+            textArea.append("Saved to " + JSON_STORE);
 
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + JSON_STORE);
+            textArea.append("Unable to write to file: " + JSON_STORE);
         }
 
 
@@ -502,6 +485,8 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     }
 
+    //Modifies: none
+    //Effect: creates buttons for the Event Menu and associate to an ActionListener
     private void createEventMenuButtons(List<String> strings, JPanel panel) {
 
         for (String s : strings) {
@@ -514,6 +499,8 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     }
 
+    //Modifies: none
+    //Effect: creates buttons for the Match Selection Menu and associate to an ActionListener
     private void createMatchSelectorOption(List<String> strings, JPanel panel) {
 
         for (String s : strings) {
@@ -641,7 +628,6 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     //Modifies: none
     //Effect: process the button actions from displayMainOptions Panel
-
     protected void processStoredMatchOptions(ActionEvent e) {
 
         if (e.getActionCommand().equals("Import Match")) {
@@ -660,6 +646,8 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     }
 
+    //Modifies: none
+    //Effect: process the button actions from displaySummaryOptions Panel
     protected void processSummaryOptions(ActionEvent e) {
 
         if (e.getActionCommand().equals("List All Matches Imported")) {
@@ -678,7 +666,7 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
     //Effect: Retrieve either all games or just selected games, according to option chosen for Event selection
     protected void processGameSelectionOptions(ActionEvent e) {
 
-        List<MatchData> matches;
+
         List<String> eventType = new ArrayList<>();
 
         if (this.selectedEvent.equals("Goals")) {
@@ -694,7 +682,7 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
                 }
             }
 
-            matches = retrieveSelectedMatches();
+            List<MatchData> matches = retrieveSelectedMatches();
             eventType.add("GOAL");
             rink.updateRink(matches, eventType);
 
@@ -707,14 +695,16 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
                 listOptionFrame("Select Matches Match(es)");
 
             }
-            matches = retrieveSelectedMatches();
+            List<MatchData> matches = retrieveSelectedMatches();
             rink.updateRink(matches, shotEvents);
 
         }
+        textArea.append("\nRetrieved from " + matchSelections.toString());
         displayMenu();
     }
 
-
+    //Modifies: none
+    //Effect: process the button actions from displayEventOptions Panel
     protected void processEventOptions(ActionEvent e) {
 
 
@@ -733,6 +723,7 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
 
     @Override
+    //Refer to Interface for Spec
     protected void printStoreMatchID() {
         textArea.append("\nMatches Stored In This Instance\n");
 
@@ -748,10 +739,15 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
     }
 
     @Override
+    //Modifies: none
+    //Effect: none. not used in the program, abstraction method from WindowListener
     public void windowOpened(WindowEvent e) {
 
     }
 
+    //Modifies: none
+    //Effect: displays the Exit Options when the user closes the JFrame
+    @Override
     public void windowClosing(WindowEvent e) {
 
         processExitOptions();
@@ -759,36 +755,45 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
 
     }
 
+    //Modifies: none
+    //Effect: none. not used in the program, abstraction method from WindowListener
     @Override
     public void windowClosed(WindowEvent e) {
 
     }
 
+    //Modifies: none
+    //Effect: none. not used in the program, abstraction method from WindowListener
     @Override
     public void windowIconified(WindowEvent e) {
 
     }
 
+    //Modifies: none
+    //Effect: none. not used in the program, abstraction method from WindowListener
     @Override
     public void windowDeiconified(WindowEvent e) {
 
     }
 
+    //Modifies: none
+    //Effect: none. not used in the program, abstraction method from WindowListener
     @Override
     public void windowActivated(WindowEvent e) {
 
     }
 
+    //Modifies: none
+    //Effect: none. not used in the program, abstraction method from WindowListener
     @Override
     public void windowDeactivated(WindowEvent e) {
 
     }
 
-
+    //Modifies: none
+    //Effect: none. not used in the program, abstraction method from WindowListener
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
 }
-//button.addAction(this::onButtonPress);
-//onButtonPress(Action e);

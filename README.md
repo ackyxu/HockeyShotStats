@@ -56,3 +56,7 @@ The JSON contains multiple nested objects, but this program (as of now) is only 
 - As a user, I want to be able to save all the matches I retrieve in the current session, so I won't need to call to retrieve the matches again in the future sessions.
 - As a user, I want to be able to have an option to save my current session of matches or not, and option to load a different session (for different a hockey season)
 - As a user, I wamt to be able to parse the JSON API call from NHL Stats into the Objects in my program
+
+*For Phase 3 of the Project:*
+- As a user, I want to be able to perform the same action as Phase 2, but with a GUI
+- As a user, I want to be able to create a shot related plot overalyed on a ice rink from the MactchData that I imported.

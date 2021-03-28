@@ -138,9 +138,6 @@ public abstract class Interface {
     }
 
 
-    //MODIFIES: None
-    //EFFECT: Prints out a list of Strings that represents an event
-    protected abstract void printEvents(List<String> ls);
 
 
 
@@ -177,10 +174,7 @@ public abstract class Interface {
         return match;
     }
 
-    //REQUIRE: s is a String that contains only numerical Digits\
-    //MODIFIES: None
-    //EFFECT: Parse a string into Integer that represents a MatchData.MatchID
-    protected abstract Integer parseStringToID(String s);
+
 
     //REQUIRE: storedMatchData.size() != 0
     //MODIFIES: None
