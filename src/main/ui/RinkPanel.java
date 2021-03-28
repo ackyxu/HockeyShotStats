@@ -20,6 +20,9 @@ public class RinkPanel extends JPanel {
         add(rink);
     }
 
+    //Modifies: this
+    //Effect: Updates the RinkLabel the desire shot plots
+
     public void updateRink(List<MatchData> matches, List<String> options) {
 
         rink.refreshRink();
@@ -35,12 +38,7 @@ public class RinkPanel extends JPanel {
 
     }
 
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        g.drawImage(image, 0, 0,getWidth(),getHeight(), this);
-//        // see javadoc for more info on the parameters
-//    }
+
 
 }
 
