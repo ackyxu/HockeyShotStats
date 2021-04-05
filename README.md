@@ -1,6 +1,6 @@
 # My Personal Project
 
-## *SHOOT THE PUCK!  Visualization of Hockey Shots, and other Stats*
+## *SHOOT THE PUCK!  Visualization of Hockey Shots, and other Stats For the Canucks*
 
 ### Introduction
 
