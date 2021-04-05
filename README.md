@@ -61,7 +61,13 @@ The JSON contains multiple nested objects, but this program (as of now) is only 
 - As a user, I want to be able to perform the same action as Phase 2, but with a GUI
 - As a user, I want to be able to create a shot related plot overalyed on a ice rink from the MactchData that I imported.
 
-*For Phase 4 of the Project (Task 3):*
+*Phase 4: Task 2*
+I created a CanucksNotInImport Exception to prevent a user from importing a game that the Canucks did not played in, as my program at this stage specifically only look at Canucks games.
+This is first thrown in JsonImport.parseGameData, which then is rethrown in JsonImport.parseMatchData, which then is rethrown again in JsonImport.read.
+From there, the exception is caught in the processImportMatch method in both Interface and override in GraphicalInterface, to prevent a user from importing a game that is not related to the Canucks.
+
+
+*Phase 4: Task 3:*
 - I wish to improve the cohesion with my GraphicInterface class by creating specific classes for the JPanels that I used and for JButton:
 - Since all my JPanel on the right side follows a specific design recipe(Gridlayout 4x1 with maximum of 4 JButtons), I think I can abstract out both the JPanel and JButton from GraphicInterface, and then abstract out the creation of the JPanel in a sperate class.
 - I should have realized that I could create an Abstract class during phase 1 so I can abstract out more methods during phase 3 for my interfaces.  Since I designed most of the methods for my ConsoleInterface wtih System.out.println, it made it hard to use some of the method in my GraphicInterface.
