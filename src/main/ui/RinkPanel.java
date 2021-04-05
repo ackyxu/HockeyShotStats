@@ -9,7 +9,7 @@ import java.util.List;
 
 //https://stackoverflow.com/questions/23183679/resize-image-so-that-it-fits-jpanel-grid
 
-
+//Initates the Pannel that houses RinkLabel
 public class RinkPanel extends JPanel {
 
     RinkLabel rink;

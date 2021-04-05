@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//Creates the Produce the GUI for the program
 public class GraphicInterface extends Interface implements ActionListener, WindowListener {
 
     private static final int WIDTH = 1000;
@@ -34,7 +35,6 @@ public class GraphicInterface extends Interface implements ActionListener, Windo
     private String input;
     private JList<Integer> selections;
     private List<Integer> matchSelections;
-    private JFrame listFrame;
     private String selectedEvent;
 
 

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+//Abstract Class to hold all the common methods and fields between the Interfaces Class
 public abstract class Interface {
     protected static final String JSON_STORE = "./data/";
     protected static final String JSON_IMPORT = "./data/imports/";

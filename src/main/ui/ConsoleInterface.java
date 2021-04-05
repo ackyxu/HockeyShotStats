@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-
+//Console Interface for phase 2 of the project
 public class ConsoleInterface extends Interface {
 
     private Scanner input;

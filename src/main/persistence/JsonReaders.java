@@ -8,6 +8,7 @@ import org.json.JSONObject;
 //where certain Key/JSONObject does not exist as a sub Object (example, not all LiveData will contain player
 //information, such as events indicating a match started)
 //Convert JSON files to Classes
+//Contains Methods use to parse special cases of JSONObjects
 public abstract class JsonReaders {
 
     //EFFECT: Parse a JSONObject to a string; if JSONException is caught, return empty string
